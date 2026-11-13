@@ -434,7 +434,7 @@ function wowNotionPicker(anchor,button){
 function wowNotionAdd(type){
  const anchor=wowNotionCurrentAnchor;
  if(!anchor)return;
- const tab=anchor.split('|')[0]||wowNotionTabs.find(t=>document.getElementById(t).querySelector('[data-notion-anchor="'+anchor+'"]'));
+ const parentBlock=wowNotionData.blocks.find(b=>b.id===anchor);const tab=parentBlock?parentBlock.tab:anchor.split('|')[0];
  const id='nb-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7);
  const block={id,tab,after:anchor,type,title:type==='heading'?'Новый заголовок':'Новая карточка',body:'',items:['Первый пункт']};
  wowNotionData.blocks.push(block);wowNotionSave();wowNotionRefresh();
