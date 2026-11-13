@@ -27,6 +27,13 @@
 @media(max-width:1050px){.task-table-top,.task-row{grid-template-columns:24px minmax(180px,2fr) minmax(105px,.8fr) minmax(95px,.7fr) 36px;gap:7px}.task-table-top>*:nth-child(5),.task-row>*:nth-child(5),.task-table-top>*:nth-child(6),.task-row>*:nth-child(6){display:none}.task-row{padding:9px 12px}.task-group-head{padding:14px}.task-details{padding-left:39px}}
 @media(max-width:690px){.task-summary{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.task-filters input{min-width:100%}.task-filters select{width:calc(50% - 8px);max-width:none}.task-group-head h3{font-size:12px}.task-progress{width:42px}.task-table-top{display:none}.task-row{grid-template-columns:23px minmax(130px,1fr) 35px;gap:6px;padding:12px}.task-row>*:nth-child(3),.task-row>*:nth-child(4),.task-row>*:nth-child(5),.task-row>*:nth-child(6){display:none}.task-row .task-check{margin-top:9px}.task-more{font-size:20px}.task-details{display:block;padding:5px 15px 16px 42px}.task-details:not(.open) .task-inline-fields{display:none}.task-detail-foot{font-size:10px}.task-inline-fields{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.task-add-inline{padding-left:43px}}
 
+
+/* Inline task comments replace the former priority column. */
+.task-table-top> :nth-child(6){min-width:0}
+.task-inline-comment{width:100%;min-width:0;max-width:100%;min-height:34px;height:35px;resize:vertical;overflow:auto;border:1px solid transparent;border-radius:8px;background:transparent;font:11px/1.35 inherit;color:#715c68;padding:8px 6px;white-space:pre-wrap;box-sizing:border-box}
+.task-inline-comment::placeholder{color:#b9a7b2}
+.task-inline-comment:hover,.task-inline-comment:focus{background:#fff;border-color:#dfc2d1;outline:none}
+
 /* Embed version of approved task manager in WOW Dashboard */
 html.wow-task-embed,html.wow-task-embed body{height:auto;min-height:0;background:transparent;overflow-x:hidden}
 html.wow-task-embed .layout{display:block;min-height:0}
@@ -188,7 +195,7 @@ function taskControls(root){const bar=node('div','task-filters');const search=no
  const view=node('button','',taskView==='grouped'?'▤ По этапам':'☷ Списком');view.onclick=()=>{taskView=taskView==='grouped'?'flat':'grouped';taskRedraw()};bar.append(view);
  const add=node('button','task-primary','＋ Добавить задачу');add.onclick=()=>taskAdd();bar.append(add);root.append(bar)}
 function taskRedraw(keepFocus){const root=document.getElementById('document');let searchPos=0;if(keepFocus){const focused=root.querySelector('input[type="search"]');searchPos=focused?.selectionStart||0}root.replaceChildren();renderTaskManager(root);if(keepFocus){const input=root.querySelector('input[type="search"]');input.focus();input.setSelectionRange(searchPos,searchPos)}}
-function renderTaskManager(root){const outer=node('div','taskspace');const intro=node('div','task-intro');const text=node('div');text.append(node('b','', 'Чек-лист запуска · личный бренд'));text.append(node('div','', '59 задач из исходного чек-листа ЛБ. Отмечай галочкой, меняй текст, срок, ответственного или статус прямо в строке.'));const source=node('span','task-source','ЧЕРНОВИК · сохраняется в вашем браузере');intro.append(text,source);outer.append(intro);taskSummary(outer);taskControls(outer);
+function renderTaskManager(root){const outer=node('div','taskspace');taskSummary(outer);taskControls(outer);
  const list=node('div');list.className='task-groups';const visible=taskItems.filter(taskVisible);
  if(!visible.length){list.append(node('div','task-empty','По этим фильтрам задач не найдено. Измени фильтры или добавь задачу.'))}
  const keys=taskView==='flat'?['Все задачи']:Object.keys(TASK_STAGE_NAMES).filter(k=>taskStage==='Все этапы'||taskStage===k);
@@ -201,7 +208,7 @@ function renderTaskManager(root){const outer=node('div','taskspace');const intro
   const body=node('div','task-list');for(const t of sectionRows)body.append(taskRow(t));group.append(body);
   const add=node('button','task-add-inline','＋ Добавить задачу в этот этап');add.onclick=()=>taskAdd(taskView==='flat'?null:Number(k));group.append(add);list.append(group)
  }
- outer.append(list);if(taskView==='grouped'){const addStage=node('button','task-new-stage','＋ Добавить новый этап запуска');addStage.onclick=taskNewStage;outer.append(addStage)}outer.append(node('div','task-footer','Исходные отметки выполненных задач сохранены (3 из 59). Статусы и приоритеты можно менять. Правки сохраняются только в этом браузере; другие участники команды их пока не видят.'));root.append(outer);
+ outer.append(list);if(taskView==='grouped'){const addStage=node('button','task-new-stage','＋ Добавить новый этап запуска');addStage.onclick=taskNewStage;outer.append(addStage)}outer.append(node('div','task-footer','Изменения пока сохраняются только в этом браузере. Совместное редактирование подключается отдельно.'));root.append(outer);
 }
 function taskRow(t){const row=node('div','task-row'+(t.done?' task-done':''));row.dataset.taskId=t.id;
  const check=node('input','task-check');check.type='checkbox';check.checked=!!t.done;check.setAttribute('aria-label','Отметить задачу выполненной: '+t.title);check.onchange=()=>{taskChange(t.id,'done',check.checked);taskRedraw()};row.append(check);
@@ -210,12 +217,12 @@ function taskRow(t){const row=node('div','task-row'+(t.done?' task-done':''));ro
  const opts=[...new Set([...TASK_OWNERS,...taskItems.map(x=>x.owner).filter(Boolean)])];const own=taskMenuOptions(t.owner||'Не назначен',opts,(v)=>{if(v==='Не назначен')v='';taskChange(t.id,'owner',v);taskRedraw()});row.append(own);
  const status=taskMenuOptions(t.status||'К выполнению',TASK_STATUSES,v=>{taskChange(t.id,'status',v);taskRedraw()});const statClass=t.status==='Готово'?'status-done':t.status==='В работе'?'status-active':t.status==='Заблокировано'?'status-blocked':t.status==='На согласовании'?'status-waiting':t.status==='Отложено'||t.status==='Не делаем'?'status-muted':'';if(statClass)status.classList.add(statClass);row.append(status);
  const due=taskInput(t.due,'Срок задачи',v=>taskChange(t.id,'due',v));row.append(due);
- const priority=taskMenuOptions(t.priority||'—',['—','Высокий','Средний','Низкий'],v=>taskChange(t.id,'priority',v));row.append(priority);
+ const commentField=node('textarea','task-inline-comment');commentField.value=t.comment||'';commentField.rows=1;commentField.placeholder='Комментарий…';commentField.setAttribute('aria-label','Комментарий к задаче');commentField.addEventListener('input',()=>{taskChange(t.id,'comment',commentField.value);const detailComment=row.parentElement?.querySelector('.task-comment');if(detailComment&&detailComment!==document.activeElement)detailComment.value=commentField.value});row.append(commentField);
  const more=node('button','task-more','⋯');more.title='Комментарий, детали и действия';more.setAttribute('aria-label','Открыть детали задачи');more.onclick=()=>{if(taskExpanded.has(t.id))taskExpanded.delete(t.id);else taskExpanded.add(t.id);taskRedraw()};row.append(more);
  const container=node('div');container.append(row);
  const detail=node('div','task-details'+(taskExpanded.has(t.id)?' open':''));
  const lab=node('label','','Комментарий / примечание');detail.append(lab);
- const note=node('textarea','task-comment');note.value=t.comment||'';note.placeholder='Добавь комментарий, блокер или решение с планёрки…';note.addEventListener('input',()=>taskChange(t.id,'comment',note.value));detail.append(note);
+ const note=node('textarea','task-comment');note.value=t.comment||'';note.placeholder='Добавь комментарий, блокер или решение с планёрки…';note.addEventListener('input',()=>{taskChange(t.id,'comment',note.value);const inline=container.querySelector('.task-inline-comment');if(inline&&inline!==document.activeElement)inline.value=note.value});detail.append(note);
  const info=node('div','task-detail-foot',(t.sourceRow?'Исходная строка в чек-листе: '+t.sourceRow+' · ':'Добавлено в демо · ')+(t.sub||'Раздел без подраздела'));
  detail.append(info);
  const actions=node('div');actions.style.cssText='display:flex;gap:7px;margin-top:10px;flex-wrap:wrap';
@@ -225,7 +232,7 @@ function taskRow(t){const row=node('div','task-row'+(t.done?' task-done':''));ro
  const moveDown=node('button','task-btn','↓');moveDown.title='Переместить ниже';moveDown.onclick=()=>taskMove(t.id,1);
  actions.append(moveUp,moveDown,clone,remove);detail.append(actions);
  const small=node('div','task-inline-fields');small.style.cssText='margin-top:8px';
- small.append(node('label','','Исполнитель:'));small.append(taskMenuOptions(t.owner||'Не назначен',opts,v=>{taskChange(t.id,'owner',v==='Не назначен'?'':v);taskRedraw()}));small.append(node('label','','Статус:'));small.append(taskMenuOptions(t.status||'К выполнению',TASK_STATUSES,v=>{taskChange(t.id,'status',v);taskRedraw()}));small.append(node('label','','Срок:'));small.append(taskInput(t.due,'Срок задачи',v=>taskChange(t.id,'due',v)));small.append(node('label','','Приоритет:'));small.append(taskMenuOptions(t.priority||'—',['—','Высокий','Средний','Низкий'],v=>taskChange(t.id,'priority',v)));detail.append(small);
+ small.append(node('label','','Исполнитель:'));small.append(taskMenuOptions(t.owner||'Не назначен',opts,v=>{taskChange(t.id,'owner',v==='Не назначен'?'':v);taskRedraw()}));small.append(node('label','','Статус:'));small.append(taskMenuOptions(t.status||'К выполнению',TASK_STATUSES,v=>{taskChange(t.id,'status',v);taskRedraw()}));small.append(node('label','','Срок:'));small.append(taskInput(t.due,'Срок задачи',v=>taskChange(t.id,'due',v)));detail.append(small);
  container.append(detail);return container
 }
 function taskAdd(stage){const assigned=Number.isFinite(stage)?stage:1;const t={id:'new-'+Date.now()+'-'+Math.random().toString(36).slice(2,7),sourceRow:null,stage:assigned,sub:'',owner:'',done:false,status:'К выполнению',due:'',comment:'',title:'Новая задача — нажми и измени название',priority:'—'};
