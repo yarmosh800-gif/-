@@ -1,7 +1,7 @@
 import {createClient} from 'https://esm.sh/@supabase/supabase-js@2.58.0';
 const db=createClient('https://mkwupwbpgfdvaciowgel.supabase.co','sb_publishable_OfuG19Samqr0tCsQmIr9eA_QBVwa98X');
 const isTasks=location.pathname.endsWith('tasks.html'), embed=isTasks&&new URLSearchParams(location.search).get('embed')==='1';
-let me=null,role=null,active=false,localDraft=null,known=new Map(),channel=null,refreshing=false,sending=false;
+let me=null,role=null,active=false,connecting=false,localDraft=null,known=new Map(),channel=null,refreshing=false;
 const $=q=>document.querySelector(q),copy=x=>JSON.parse(JSON.stringify(x));
 const state=s=>{const n=$('#team-state');if(n)n.textContent=s};
 const say=s=>{const n=$('#team-message');if(n)n.textContent=s};
@@ -18,6 +18,8 @@ function panel(){
 }
 async function listMembers(){if(!role||!$('#team-members'))return;const {data}=await db.from('wow_members').select('email,role');$('#team-members').textContent=(data||[]).map(x=>x.email+(x.role==='admin'?' (админ)':'')).join(' · ')}
 async function connect(){
+ if(connecting||active)return;connecting=true;
+ try{
  const {data:{user}}=await db.auth.getUser();
  if(!user){active=false;state('Локально · войдите для общего редактирования');return}
  me=user;
@@ -28,6 +30,7 @@ async function connect(){
  state('● Общая база · '+user.email);listMembers();await loadRemote(true);
  channel=db.channel('wow-team-'+(isTasks?'tasks':'docs')).on('postgres_changes',{event:'*',schema:'public',table:'wow_records'},()=>loadRemote(false)).subscribe();
  setInterval(()=>{if(document.visibilityState==='visible')loadRemote(false)},15000);
+ }finally{connecting=false}
 }
 function busy(){const a=document.activeElement;return !!(a&&(a.isContentEditable||(['INPUT','TEXTAREA','SELECT'].includes(a.tagName)&&!a.closest('#wow-team'))))}
 async function loadRemote(first){
@@ -70,4 +73,5 @@ async function importDraft(){
   await flush();await loadRemote(false);say('Локальные правки перенесены.');
  }
 }
-panel();setup();db.auth.onAuthStateChange((_e,s)=>{if(s?.user&&!active)setTimeout(connect,0)});connect().catch(e=>state('Ошибка: '+e.message));
+function boot(){panel();setup();db.auth.onAuthStateChange((_e,s)=>{if(s?.user&&!active)setTimeout(connect,0)});connect().catch(e=>state('Ошибка: '+e.message))}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
