@@ -41,7 +41,7 @@ async function loadRemote(first){
   known=new Map((data||[]).map(x=>[x.id,JSON.stringify(x.payload)]));
   if(isTasks&&window.wowTaskBridge)window.wowTaskBridge.apply((data||[]).filter(x=>x.kind==='task').map(x=>x.payload),first);
   if(!isTasks&&window.wowDocsBridge)for(const type of ['notion','edit','retro']){const r=(data||[]).find(x=>x.id==='doc:'+type);if(r)window.wowDocsBridge.apply(type,r.payload,first)}
-  if(first)state('● Общая база · '+me.email);
+  if(first){try{localStorage.setItem(isTasks?'wow_team_tasks_initialized':'wow_team_docs_initialized','1')}catch(e){}state('● Общая база · '+me.email);}
  }finally{refreshing=false}
 }
 const queued=new Map();let timer=null,flushing=false;
@@ -57,8 +57,8 @@ const api={get ready(){return active},saveDoc:(type,payload)=>enqueue({id:'doc:'
 },removeTask:async id=>{if(!active)return;const {error}=await db.from('wow_records').delete().eq('id',id);if(error)state('Ошибка удаления: '+error.message)},refresh:()=>loadRemote(false)};
 window.wowTeam=api;
 function setup(){
- if(isTasks&&window.wowTaskBridge){localDraft=copy(window.wowTaskBridge.collect());window.wowTaskBridge.onChange=api.saveTasks;window.wowTaskBridge.onDelete=api.removeTask}
- if(!isTasks&&window.wowDocsBridge){localDraft=copy(window.wowDocsBridge.collect());window.wowDocsBridge.onChange=api.saveDoc}
+ if(isTasks&&window.wowTaskBridge){const backup='wow_team_task_draft_backup_v1';localDraft=copy(window.wowTaskBridge.collect());try{if(!localStorage.getItem(backup)&&!localStorage.getItem('wow_team_tasks_initialized'))localStorage.setItem(backup,JSON.stringify(localDraft));localDraft=JSON.parse(localStorage.getItem(backup)||JSON.stringify(localDraft))}catch(e){}window.wowTaskBridge.onChange=api.saveTasks;window.wowTaskBridge.onDelete=api.removeTask}
+ if(!isTasks&&window.wowDocsBridge){const backup='wow_team_docs_draft_backup_v1';localDraft=copy(window.wowDocsBridge.collect());try{if(!localStorage.getItem(backup)&&!localStorage.getItem('wow_team_docs_initialized'))localStorage.setItem(backup,JSON.stringify(localDraft));localDraft=JSON.parse(localStorage.getItem(backup)||JSON.stringify(localDraft))}catch(e){}window.wowDocsBridge.onChange=api.saveDoc}
 }
 async function importDraft(){
  if(!active)return;
@@ -66,11 +66,11 @@ async function importDraft(){
   const rows=(localDraft||[]).filter(t=>!window.wowTaskBridge.seedMatches(t));
   if(!rows.length){say('Изменений относительно исходного списка нет.');return}
   if(!confirm('Отправить '+rows.length+' локальных изменений в общую базу? Одноимённые задачи могут быть заменены.'))return;
-  rows.forEach((t,i)=>enqueue({id:t.id,kind:'task',payload:t,sort_order:i}));await flush();await loadRemote(false);say('Локальные задачи перенесены.');
+  rows.forEach((t,i)=>enqueue({id:t.id,kind:'task',payload:t,sort_order:i}));await flush();try{localStorage.removeItem('wow_team_task_draft_backup_v1')}catch(e){}await loadRemote(false);say('Локальные задачи перенесены.');
  }else{
   if(!confirm('Перенести локальные правки? Общая версия этих разделов будет заменена.'))return;
   for(const k of ['notion','edit','retro'])if(localDraft?.[k]&&Object.keys(localDraft[k]).length)api.saveDoc(k,localDraft[k]);
-  await flush();await loadRemote(false);say('Локальные правки перенесены.');
+  await flush();try{localStorage.removeItem('wow_team_docs_draft_backup_v1')}catch(e){}await loadRemote(false);say('Локальные правки перенесены.');
  }
 }
 function boot(){panel();setup();db.auth.onAuthStateChange((_e,s)=>{if(s?.user&&!active)setTimeout(connect,0)});connect().catch(e=>state('Ошибка: '+e.message))}
