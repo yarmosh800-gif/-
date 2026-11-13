@@ -3,13 +3,8 @@ import {createClient} from 'https://esm.sh/@supabase/supabase-js@2.58.0';
 const db=createClient('https://mkwupwbpgfdvaciowgel.supabase.co','sb_publishable_OfuG19Samqr0tCsQmIr9eA_QBVwa98X',{auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false}});
 const $=s=>document.querySelector(s),clone=x=>JSON.parse(JSON.stringify(x));
 let connected=false,loading=false,writing=false,dirty=new Map(),timer=null,localDraft=null,known=new Map();
-function status(message){const el=$('#wow-shared-status');if(el)el.textContent=message}
-function show(){
- if($('#wow-shared')){$('#wow-shared-import').onclick=importLocal;return}
- const style=document.createElement('style');style.textContent='#wow-shared{margin:10px 0 15px;padding:10px 13px;border:1px solid #e5d8e2;border-radius:10px;background:#fff;color:#695266;font:12px/1.5 Inter,Arial,sans-serif}#wow-shared strong{color:#70334f}#wow-shared button{border:1px solid #ddc4d1;background:#fff;border-radius:7px;padding:5px 9px;margin-left:9px;cursor:pointer;color:#843752;font:inherit}#wow-shared details{margin-top:7px}#wow-shared summary{cursor:pointer}';document.head.append(style);
- const box=document.createElement('div');box.id='wow-shared';box.innerHTML='<strong>● Совместное редактирование</strong> <span id="wow-shared-status">Подключаем общую базу…</span><details><summary>Локальные изменения и доступ</summary><p>Вход не нужен: любой, у кого есть ссылка, может изменять общие данные. Не размещайте здесь пароли и конфиденциальную информацию.</p><button id="wow-shared-import" type="button">Перенести мои старые локальные правки</button><p>Перенос заменит соответствующие общие разделы. Подтверждение обязательно.</p></details>';
- const main=$('main');main?.insertBefore(box,main.querySelector('.top')?.nextSibling||main.firstChild);$('#wow-shared-import').onclick=importLocal;
-}
+function status(message){if(/Ошибка|ошибка/i.test(String(message)))console.error('[WOW sync]',message)}
+// Collaboration runs silently without an interface panel.
 function busy(){const el=document.activeElement;return !!(el&&(el.isContentEditable||(['INPUT','TEXTAREA','SELECT'].includes(el.tagName)&&!el.closest('#wow-shared'))))}
 async function load(first=false){
  if(!connected||loading||writing||dirty.size||(!first&&busy()))return;loading=true;
@@ -33,7 +28,7 @@ async function importLocal(){
  await flush();status('Локальные изменения перенесены');try{localStorage.removeItem('wow_team_docs_draft_backup_v1')}catch(e){}
 }
 async function init(){
- if(!window.wowDocsBridge)return;show();
+ if(!window.wowDocsBridge)return;
  const key='wow_team_docs_draft_backup_v1';localDraft=clone(window.wowDocsBridge.collect());
  try{if(!localStorage.getItem(key)&&!localStorage.getItem('wow_team_docs_initialized'))localStorage.setItem(key,JSON.stringify(localDraft));localDraft=JSON.parse(localStorage.getItem(key)||JSON.stringify(localDraft))}catch(e){}
  window.wowDocsBridge.onChange=saveDoc;connected=true;await load(true);
