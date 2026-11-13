@@ -207,7 +207,7 @@ const TASK_OWNERS=['Не назначен','Настя','Саша','Арина',
 let taskItems=loadTaskItems(),taskQuery='',taskOwner='Все исполнители',taskStatus='Все статусы',taskStage='Все этапы',taskView='grouped';
 let taskCollapsed={};let taskExpanded=new Set();let taskScrollState=0;
 function loadTaskItems(){try{const v=JSON.parse(localStorage.getItem(TASK_STORAGE)||'null');if(Array.isArray(v)&&v.every(t=>t&&typeof t.id==='string'&&typeof t.title==='string'))return v;}catch(e){}return JSON.parse(JSON.stringify(TASK_SEED))}
-function taskSave(){try{localStorage.setItem(TASK_STORAGE,JSON.stringify(taskItems));const s=document.getElementById('saveStatus');s.textContent='✓ Сохранено локально';s.style.color='#638471'}catch(e){toast('Браузер не разрешил сохранить задачи')}}
+function taskSave(){try{localStorage.setItem(TASK_STORAGE,JSON.stringify(taskItems));const s=document.getElementById('saveStatus');s.textContent=window.wowTeam?.ready?'✓ Общая база':'✓ Сохранено локально';s.style.color='#638471';if(window.wowTaskBridge?.onChange)window.wowTaskBridge.onChange(taskItems)}catch(e){toast('Не удалось сохранить задачи')}}
 function taskChange(id,field,value){const t=taskItems.find(t=>t.id===id);if(!t)return;t[field]=value;if(field==='status')t.done=value==='Готово';if(field==='done'){t.status=value?'Готово':'К выполнению'}taskSave()}
 function taskVisible(t){return (!taskQuery||[t.title,t.comment,t.owner,t.sub,t.due].join(' ').toLowerCase().includes(taskQuery.toLowerCase()))&&(taskOwner==='Все исполнители'||(taskOwner==='Не назначен'?!t.owner:t.owner===taskOwner))&&(taskStage==='Все этапы'||String(t.stage)===taskStage)}
 function taskCounts(list){return {total:list.length,done:list.filter(t=>t.done).length,active:list.filter(t=>t.status==='В работе').length,unassigned:list.filter(t=>!t.owner).length}}
@@ -267,7 +267,7 @@ function taskAdd(stage){const assigned=Number.isFinite(stage)?stage:1;const t={i
  taskItems.splice(last?last.i+1:taskItems.length,0,t);taskStage='Все этапы';taskStatus='Все статусы';taskOwner='Все исполнители';taskQuery='';taskCollapsed[String(assigned)]=false;taskExpanded.add(t.id);taskSave();taskRedraw();const target=document.querySelector('[data-task-id="'+t.id+'"] .task-name');if(target){target.scrollIntoView({block:'center',behavior:'smooth'});target.focus();const r=document.createRange();r.selectNodeContents(target);const s=window.getSelection();s.removeAllRanges();s.addRange(r)}toast('Задача добавлена в тестовый список')
 }
 function taskNewStage(){const name=prompt('Название нового этапа:');if(!name||!name.trim())return;const key=Math.max(...Object.keys(TASK_STAGE_NAMES).map(Number))+1;TASK_STAGE_NAMES[key]=name.trim();taskAdd(key)}
-function taskDelete(id){if(!confirm('Удалить задачу из тестового чек-листа?'))return;taskItems=taskItems.filter(t=>t.id!==id);taskExpanded.delete(id);taskSave();taskRedraw();toast('Задача удалена из демо')}
+function taskDelete(id){if(!confirm('Удалить задачу из тестового чек-листа?'))return;taskItems=taskItems.filter(t=>t.id!==id);taskExpanded.delete(id);window.wowTaskBridge?.onDelete?.(id);taskSave();taskRedraw();toast('Задача удалена из демо')}
 function taskClone(id){const i=taskItems.findIndex(t=>t.id===id);if(i<0)return;const t=JSON.parse(JSON.stringify(taskItems[i]));t.id='new-'+Date.now()+'-'+Math.random().toString(36).slice(2,7);t.sourceRow=null;t.title+=' (копия)';t.done=false;t.status='К выполнению';taskItems.splice(i+1,0,t);taskSave();taskRedraw();toast('Задача продублирована')}
 function taskMove(id,delta){const i=taskItems.findIndex(t=>t.id===id);if(i<0)return;const target=i+delta;if(target<0||target>=taskItems.length||taskItems[target].stage!==taskItems[i].stage){toast('Перемещение доступно внутри этапа');return}[taskItems[i],taskItems[target]]=[taskItems[target],taskItems[i]];taskSave();taskRedraw()}
 function taskExport(){taskSave();const payload=JSON.stringify({format:'wow-lb-task-demo-v1',source:'Чек лист ЛБ',exportedAt:new Date().toISOString(),tasks:taskItems,stages:TASK_STAGE_NAMES},null,2);const url=URL.createObjectURL(new Blob([payload],{type:'application/json;charset=utf-8'}));const a=node('a');a.href=url;a.download='WOW_Задачи_ЛБ_тест.json';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1400);toast('Задачи сохранены в JSON')}
@@ -275,6 +275,7 @@ function taskImport(file){if(!file)return;const reader=new FileReader();reader.o
 function taskReset(){if(!confirm('Сбросить тестовые задачи к исходному чек-листу? Все изменения этого раздела пропадут.'))return;taskItems=JSON.parse(JSON.stringify(TASK_SEED));for(const k of Object.keys(TASK_STAGE_NAMES))if(Number(k)>13)delete TASK_STAGE_NAMES[k];taskQuery='';taskOwner='Все исполнители';taskStatus='Все статусы';taskStage='Все этапы';taskExpanded.clear();taskCollapsed={};taskSave();taskRedraw();toast('Исходный чек-лист восстановлен')}
 
 load();renderAll();
+window.wowTaskBridge={onChange:null,onDelete:null,collect:()=>taskItems,seedMatches:t=>{const x=TASK_SEED.find(z=>z.id===t.id);return !!x&&JSON.stringify(x)===JSON.stringify(t)},apply:(rows,first)=>{if(!Array.isArray(rows))return;taskItems=JSON.parse(JSON.stringify(rows));try{localStorage.setItem(TASK_STORAGE,JSON.stringify(taskItems))}catch(e){}taskRedraw();const s=document.getElementById('saveStatus');if(s)s.textContent='✓ Общая база'}};
 </script>
 <script>
 (function(){
@@ -284,5 +285,6 @@ load();renderAll();
   window.addEventListener('load',report);requestAnimationFrame(report);
 })();
 </script>
+<script type="module" src="./wow-team.js"></script>
 </body>
 </html>
