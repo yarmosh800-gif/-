@@ -171,7 +171,7 @@ const weekTitles=['Стратегия эксперта и собственный
 
 const retroKey='wow_launch_retro_v13';
 let retro={};try{retro=JSON.parse(localStorage.getItem(retroKey)||'{}')||{}}catch(e){}
-function retroSave(){try{localStorage.setItem(retroKey,JSON.stringify(retro))}catch(e){}}
+function retroSave(){try{localStorage.setItem(retroKey,JSON.stringify(retro));window.wowDocsBridge?.onChange?.('retro',retro)}catch(e){}}
 function opsText(el){retro[el.id]=el.value;retroSave()}
 function opsEsc(v){return String(v).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;')}
 function opsDrawDecisions(){document.getElementById('opsDecisions').innerHTML=(retro.decisions||[]).map((v,i)=>'<div class="ops-decision"><input value="'+opsEsc(v)+'" placeholder="Решение, ответственный, срок" oninput="retro.decisions['+i+']=this.value;retroSave()"><button onclick="retro.decisions.splice('+i+',1);retroSave();opsDrawDecisions()">✕</button></div>').join('')}
@@ -188,7 +188,7 @@ let wowEditStore={texts:{},notes:{}};
 let wowEditOn={};
 const wowEditTargets='h2.heading,h3,p,li,.product-lead>strong,.product-table .pt-row strong,.product-table .pt-row span,.price-card .tier,.price-card .price-foot,.price-card .price-old,.price-card .price-new,.price-card .seat-limit,.stat small,.stat strong,.holiday .pill,.holiday-line,.weekhead span,.weekhead h3,.lesson summary,.lesson b,.outcome-card p,.tag,.result-check p,.lead';
 function wowEditPersist(){
-  try{localStorage.setItem(wowEditStorageKey,JSON.stringify(wowEditStore));return true}
+  try{localStorage.setItem(wowEditStorageKey,JSON.stringify(wowEditStore));window.wowDocsBridge?.onChange?.('edit',wowEditStore);return true}
   catch(e){return false}
 }
 function wowEditStatus(tab,message){
@@ -329,7 +329,7 @@ function wowNotionStatus(msg){
  const toast=document.getElementById('wow-notion-toast');
  if(toast){toast.textContent=msg;toast.classList.add('show');clearTimeout(wowNotionStatus.timer);wowNotionStatus.timer=setTimeout(()=>toast.classList.remove('show'),2300)}
 }
-function wowNotionSave(){try{localStorage.setItem(wowNotionKey,JSON.stringify(wowNotionData));document.querySelectorAll('.notion-save-status').forEach(n=>n.textContent='✓ Сохранено в этом браузере');return true}catch(e){wowNotionStatus('Не удалось сохранить. Проверьте настройки браузера.');return false}}
+function wowNotionSave(){try{localStorage.setItem(wowNotionKey,JSON.stringify(wowNotionData));window.wowDocsBridge?.onChange?.('notion',wowNotionData);document.querySelectorAll('.notion-save-status').forEach(n=>n.textContent=window.wowTeam?.ready?'✓ Общая база':'✓ Сохранено в этом браузере');return true}catch(e){wowNotionStatus('Не удалось сохранить. Проверьте настройки браузера.');return false}}
 function wowNotionLoad(){try{const x=JSON.parse(localStorage.getItem(wowNotionKey)||'{}');if(x&&typeof x==='object'){wowNotionData={edits:x.edits&&typeof x.edits==='object'?x.edits:{},blocks:Array.isArray(x.blocks)?x.blocks:[]}}}catch(e){}}
 function wowNotionPath(el,root){
  const out=[];let n=el;
@@ -515,4 +515,39 @@ function wowNotionInit(){
  wowNotionRestoreBlocks();
 }
 window.addEventListener('DOMContentLoaded',wowNotionInit);
-</script></body></html>
+
+window.wowDocsBridge={
+ onChange:null,
+ collect:()=>({notion:wowNotionData,edit:wowEditStore,retro}),
+ apply:(type,value)=>{
+  if(!value||typeof value!=='object')return;
+  if(type==='notion'){
+   wowNotionData=JSON.parse(JSON.stringify(value));
+   localStorage.setItem(wowNotionKey,JSON.stringify(wowNotionData));
+   document.querySelectorAll('[data-notion-key]').forEach(el=>{
+    const k=el.dataset.notionKey;
+    if(Object.prototype.hasOwnProperty.call(wowNotionData.edits||{},k)&&el!==document.activeElement)el.textContent=wowNotionData.edits[k];
+   });
+   wowNotionRefresh();
+   document.querySelectorAll('.notion-save-status').forEach(el=>el.textContent='✓ Общая база');
+  }
+  if(type==='edit'){
+   wowEditStore=JSON.parse(JSON.stringify(value));
+   localStorage.setItem(wowEditStorageKey,JSON.stringify(wowEditStore));
+   document.querySelectorAll('[data-wow-edit-key]').forEach(el=>{
+    const key=el.dataset.wowEditKey;
+    const v=wowEditStore.texts?.[key];
+    if(el!==document.activeElement)el.textContent=v&&typeof v.to==='string'?v.to:el.dataset.wowOriginal||el.textContent;
+   });
+   wowEditTabs.forEach(tab=>wowEditDrawNotes(tab));
+  }
+  if(type==='retro'){
+   retro=JSON.parse(JSON.stringify(value));
+   localStorage.setItem(retroKey,JSON.stringify(retro));
+   ['retroGood','retroBad','retroLessons','retroNext'].forEach(id=>{
+    const el=document.getElementById(id);if(el&&el!==document.activeElement)el.value=retro[id]||'';
+   });opsDrawDecisions();
+  }
+ }
+};
+</script><script type="module" src="./wow-team.js"></script></body></html>
