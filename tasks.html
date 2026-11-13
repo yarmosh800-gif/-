@@ -34,6 +34,33 @@
 .task-inline-comment::placeholder{color:#b9a7b2}
 .task-inline-comment:hover,.task-inline-comment:focus{background:#fff;border-color:#dfc2d1;outline:none}
 
+
+/* Compact spreadsheet-like task table; keep edits and browser data intact. */
+.taskspace{font-size:11px}
+.task-summary{gap:8px;margin:8px 0 10px}
+.task-kpi{padding:9px 12px;border-radius:9px}
+.task-kpi strong{font-size:20px}
+.task-filters{gap:6px;margin:9px 0 12px}
+.task-filters input,.task-filters select{padding:7px 9px;font-size:11px}
+.task-filters button{padding:7px 10px}
+.task-group{margin-bottom:7px;border-radius:9px;box-shadow:none;border-color:#d8dce7}
+.task-group-head{padding:9px 12px;gap:9px;background:#f0f2f8}
+.task-group-head h3{font-size:12px}
+.task-group .task-list{border-top:1px solid #d7dce7}
+.task-row{grid-template-columns:23px minmax(230px,2.5fr) minmax(86px,.65fr) minmax(93px,.7fr) minmax(130px,1.25fr) 26px;gap:6px;padding:3px 10px;min-height:37px;align-items:center;border-top:1px solid #e3e6ee}
+.task-row>*{min-width:0}
+.task-row .task-check{margin:0 2px}
+.task-name{font-size:11px;padding:4px 2px;min-height:25px;line-height:1.4}
+.task-select{font-size:10px;padding:5px 17px 5px 5px}
+.task-due{font-size:10px;padding:5px}
+.task-inline-comment{font-size:10px;height:28px;min-height:28px;padding:5px;resize:vertical}
+.task-more{font-size:16px;height:25px;width:25px}
+.task-details{padding:8px 12px 12px 40px}
+.task-add-inline{padding:8px 12px 8px 39px}
+.task-footer{font-size:10px;padding:8px 0}
+@media(max-width:1050px){.task-row{grid-template-columns:23px minmax(160px,2fr) minmax(80px,.7fr) minmax(80px,.7fr) minmax(100px,1fr) 26px;gap:5px}.task-row>*:nth-child(5),.task-row>*:nth-child(6){display:block}.task-row{padding:4px 7px}}
+@media(max-width:690px){.task-row{grid-template-columns:22px minmax(115px,1fr) minmax(65px,.6fr) 26px;gap:5px}.task-row>*:nth-child(3){display:block}.task-row>*:nth-child(4),.task-row>*:nth-child(5){display:none}.task-row>*:nth-child(6){display:block}.task-details{display:none}.task-details.open{display:block}.task-inline-fields{display:grid}}
+
 /* Embed version of approved task manager in WOW Dashboard */
 html.wow-task-embed,html.wow-task-embed body{height:auto;min-height:0;background:transparent;overflow-x:hidden}
 html.wow-task-embed .layout{display:block;min-height:0}
@@ -182,15 +209,15 @@ let taskCollapsed={};let taskExpanded=new Set();let taskScrollState=0;
 function loadTaskItems(){try{const v=JSON.parse(localStorage.getItem(TASK_STORAGE)||'null');if(Array.isArray(v)&&v.every(t=>t&&typeof t.id==='string'&&typeof t.title==='string'))return v;}catch(e){}return JSON.parse(JSON.stringify(TASK_SEED))}
 function taskSave(){try{localStorage.setItem(TASK_STORAGE,JSON.stringify(taskItems));const s=document.getElementById('saveStatus');s.textContent='✓ Сохранено локально';s.style.color='#638471'}catch(e){toast('Браузер не разрешил сохранить задачи')}}
 function taskChange(id,field,value){const t=taskItems.find(t=>t.id===id);if(!t)return;t[field]=value;if(field==='status')t.done=value==='Готово';if(field==='done'){t.status=value?'Готово':'К выполнению'}taskSave()}
-function taskVisible(t){return (!taskQuery||[t.title,t.comment,t.owner,t.sub,t.due].join(' ').toLowerCase().includes(taskQuery.toLowerCase()))&&(taskOwner==='Все исполнители'||(taskOwner==='Не назначен'?!t.owner:t.owner===taskOwner))&&(taskStatus==='Все статусы'||(taskStatus==='Незавершённые'?!t.done:t.status===taskStatus))&&(taskStage==='Все этапы'||String(t.stage)===taskStage)}
+function taskVisible(t){return (!taskQuery||[t.title,t.comment,t.owner,t.sub,t.due].join(' ').toLowerCase().includes(taskQuery.toLowerCase()))&&(taskOwner==='Все исполнители'||(taskOwner==='Не назначен'?!t.owner:t.owner===taskOwner))&&(taskStage==='Все этапы'||String(t.stage)===taskStage)}
 function taskCounts(list){return {total:list.length,done:list.filter(t=>t.done).length,active:list.filter(t=>t.status==='В работе').length,unassigned:list.filter(t=>!t.owner).length}}
 function taskMenuOptions(current,options,onChange){const sel=node('select','task-select');sel.setAttribute('aria-label','Изменить значение');for(const v of options){const opt=node('option','',v);opt.value=v;sel.append(opt)}sel.value=current;sel.addEventListener('change',()=>onChange(sel.value));return sel}
 function taskInput(value,label,onChange){const inp=node('input','task-due');inp.type='text';inp.setAttribute('aria-label',label);inp.placeholder='Указать срок';inp.value=value||'';inp.addEventListener('change',()=>onChange(inp.value));return inp}
 function taskGroupKey(t){return Number(t.stage)}
-function taskSummary(root){const st=taskCounts(taskItems);const stats=[['Всего задач',st.total],['Выполнено',st.done],['В работе',st.active],['Без исполнителя',st.unassigned]];const box=node('div','task-summary');for(let i=0;i<stats.length;i++){const card=node('div','task-kpi');card.append(node('small','',stats[i][0]));card.append(node('strong','',String(stats[i][1])));if(i===1){const meter=node('div','task-meter');const fill=node('span');fill.style.width=(st.total?st.done/st.total*100:0)+'%';meter.append(fill);card.append(meter)}box.append(card)}root.append(box)}
+function taskSummary(root){const st=taskCounts(taskItems);const stats=[['Всего задач',st.total],['Выполнено',st.done],['Осталось',st.total-st.done],['Без исполнителя',st.unassigned]];const box=node('div','task-summary');for(let i=0;i<stats.length;i++){const card=node('div','task-kpi');card.append(node('small','',stats[i][0]));card.append(node('strong','',String(stats[i][1])));if(i===1){const meter=node('div','task-meter');const fill=node('span');fill.style.width=(st.total?st.done/st.total*100:0)+'%';meter.append(fill);card.append(meter)}box.append(card)}root.append(box)}
 function taskControls(root){const bar=node('div','task-filters');const search=node('input');search.type='search';search.placeholder='⌕  Поиск по задачам и комментариям';search.value=taskQuery;search.setAttribute('aria-label','Поиск по задачам');search.addEventListener('input',()=>{taskQuery=search.value;taskRedraw(true)});bar.append(search);
  const owners=[...new Set(taskItems.map(t=>t.owner).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'ru'));
- const filters=[{value:taskOwner,opts:['Все исполнители','Не назначен',...owners],set:v=>taskOwner=v},{value:taskStatus,opts:['Все статусы','Незавершённые',...TASK_STATUSES],set:v=>taskStatus=v},{value:taskStage,opts:['Все этапы',...Object.keys(TASK_STAGE_NAMES)],set:v=>taskStage=v,label:stage=>stage==='Все этапы'?stage:stage+'. '+TASK_STAGE_NAMES[stage]}];
+ const filters=[{value:taskOwner,opts:['Все исполнители','Не назначен',...owners],set:v=>taskOwner=v},{value:taskStage,opts:['Все этапы',...Object.keys(TASK_STAGE_NAMES)],set:v=>taskStage=v,label:stage=>stage==='Все этапы'?stage:stage+'. '+TASK_STAGE_NAMES[stage]}];
  for(const f of filters){const sel=node('select');for(const v of f.opts){const option=node('option','',f.label?f.label(v):v);option.value=v;sel.append(option)}sel.value=f.value;sel.addEventListener('change',()=>{f.set(sel.value);taskRedraw()});bar.append(sel)}
  const view=node('button','',taskView==='grouped'?'▤ По этапам':'☷ Списком');view.onclick=()=>{taskView=taskView==='grouped'?'flat':'grouped';taskRedraw()};bar.append(view);
  const add=node('button','task-primary','＋ Добавить задачу');add.onclick=()=>taskAdd();bar.append(add);root.append(bar)}
@@ -213,9 +240,9 @@ function renderTaskManager(root){const outer=node('div','taskspace');taskSummary
 function taskRow(t){const row=node('div','task-row'+(t.done?' task-done':''));row.dataset.taskId=t.id;
  const check=node('input','task-check');check.type='checkbox';check.checked=!!t.done;check.setAttribute('aria-label','Отметить задачу выполненной: '+t.title);check.onchange=()=>{taskChange(t.id,'done',check.checked);taskRedraw()};row.append(check);
  const titleCell=node('div');const title=node('div','task-name',t.title);title.contentEditable='true';title.setAttribute('role','textbox');title.setAttribute('aria-label','Название задачи');title.addEventListener('input',()=>{taskChange(t.id,'title',title.innerText)});title.addEventListener('blur',()=>{taskChange(t.id,'title',title.innerText.trim())});titleCell.append(title);
- if(t.sub)titleCell.append(node('div','task-meta',t.sub));row.append(titleCell);
+ row.append(titleCell);
  const opts=[...new Set([...TASK_OWNERS,...taskItems.map(x=>x.owner).filter(Boolean)])];const own=taskMenuOptions(t.owner||'Не назначен',opts,(v)=>{if(v==='Не назначен')v='';taskChange(t.id,'owner',v);taskRedraw()});row.append(own);
- const status=taskMenuOptions(t.status||'К выполнению',TASK_STATUSES,v=>{taskChange(t.id,'status',v);taskRedraw()});const statClass=t.status==='Готово'?'status-done':t.status==='В работе'?'status-active':t.status==='Заблокировано'?'status-blocked':t.status==='На согласовании'?'status-waiting':t.status==='Отложено'||t.status==='Не делаем'?'status-muted':'';if(statClass)status.classList.add(statClass);row.append(status);
+ 
  const due=taskInput(t.due,'Срок задачи',v=>taskChange(t.id,'due',v));row.append(due);
  const commentField=node('textarea','task-inline-comment');commentField.value=t.comment||'';commentField.rows=1;commentField.placeholder='Комментарий…';commentField.setAttribute('aria-label','Комментарий к задаче');commentField.addEventListener('input',()=>{taskChange(t.id,'comment',commentField.value);const detailComment=row.parentElement?.querySelector('.task-comment');if(detailComment&&detailComment!==document.activeElement)detailComment.value=commentField.value});row.append(commentField);
  const more=node('button','task-more','⋯');more.title='Комментарий, детали и действия';more.setAttribute('aria-label','Открыть детали задачи');more.onclick=()=>{if(taskExpanded.has(t.id))taskExpanded.delete(t.id);else taskExpanded.add(t.id);taskRedraw()};row.append(more);
@@ -232,7 +259,7 @@ function taskRow(t){const row=node('div','task-row'+(t.done?' task-done':''));ro
  const moveDown=node('button','task-btn','↓');moveDown.title='Переместить ниже';moveDown.onclick=()=>taskMove(t.id,1);
  actions.append(moveUp,moveDown,clone,remove);detail.append(actions);
  const small=node('div','task-inline-fields');small.style.cssText='margin-top:8px';
- small.append(node('label','','Исполнитель:'));small.append(taskMenuOptions(t.owner||'Не назначен',opts,v=>{taskChange(t.id,'owner',v==='Не назначен'?'':v);taskRedraw()}));small.append(node('label','','Статус:'));small.append(taskMenuOptions(t.status||'К выполнению',TASK_STATUSES,v=>{taskChange(t.id,'status',v);taskRedraw()}));small.append(node('label','','Срок:'));small.append(taskInput(t.due,'Срок задачи',v=>taskChange(t.id,'due',v)));detail.append(small);
+ small.append(node('label','','Исполнитель:'));small.append(taskMenuOptions(t.owner||'Не назначен',opts,v=>{taskChange(t.id,'owner',v==='Не назначен'?'':v);taskRedraw()}));small.append(node('label','','Срок:'));small.append(taskInput(t.due,'Срок задачи',v=>taskChange(t.id,'due',v)));detail.append(small);
  container.append(detail);return container
 }
 function taskAdd(stage){const assigned=Number.isFinite(stage)?stage:1;const t={id:'new-'+Date.now()+'-'+Math.random().toString(36).slice(2,7),sourceRow:null,stage:assigned,sub:'',owner:'',done:false,status:'К выполнению',due:'',comment:'',title:'Новая задача — нажми и измени название',priority:'—'};
