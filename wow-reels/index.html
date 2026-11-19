@@ -775,7 +775,7 @@ const $=id=>document.getElementById(id);
 const btn=$('wow-page-edit-start'),saveBtn=$('wow-page-edit-save'),cancelBtn=$('wow-page-edit-cancel'),status=$('wow-page-edit-status');
 if(!btn||!saveBtn||!cancelBtn)return;
 const selectors='h2,h3,h4,h5,p,li,th,td,.name,.section-title,.section-title span,.serial-intro,.serial-foot,.ep-title,.ep-mech,.idea-title,.idea-hook,.idea-heading,.season-title,.season-desc,.season-eyebrow,.series-concept .concept-packs span,.system-goal-label,.system-goal strong,.system-volume b,.system-volume span,.system-account b,.system-account span:not(.system-ig-icon),.system-weekday,.system-wednesday b,.system-wednesday p,.end,.label';
-const nodes=new Map(),initial=new Map();
+const nodes=new Map(),initial=new Map(),originalMarkup=new Map();
 let remote={fields:{}},editing=false,loading=false,offline=false;
 const setStatus=(s,error)=>{status.textContent=s||'';status.style.color=error?'#b63d54':'#887381'};
 function keyOf(el,root){
@@ -833,7 +833,7 @@ function setEditing(on){
  btn.hidden=on;saveBtn.hidden=!on;cancelBtn.hidden=!on;
  for(const [key,el] of nodes){
   el.contentEditable=on?'plaintext-only':'false';
-  if(on){initial.set(key,el.textContent);el.removeAttribute('title')}
+  if(on){initial.set(key,getValue(el));originalMarkup.set(key,el.innerHTML);el.removeAttribute('title')}
   else{el.setAttribute('title','Нажми «Редактировать» сверху, чтобы изменить текст')}
  }
 }
@@ -842,7 +842,7 @@ btn.addEventListener('click',()=>{
  setEditing(true);setStatus('Изменяй текст прямо на странице и нажми «Сохранить»');
 });
 cancelBtn.addEventListener('click',()=>{
- for(const [key,el] of nodes)if(initial.has(key))el.textContent=initial.get(key);
+ for(const [key,el] of nodes)if(originalMarkup.has(key))el.innerHTML=originalMarkup.get(key);
  setEditing(false);setStatus('Изменения отменены');setTimeout(()=>setStatus(''),2000);
 });
 saveBtn.addEventListener('click',async()=>{
