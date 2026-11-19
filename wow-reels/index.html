@@ -335,7 +335,7 @@ body{margin:0;padding:0!important;min-height:100vh;background:linear-gradient(12
 .wow-page-editor button{font:inherit;font-size:12px;font-weight:750;cursor:pointer;border-radius:9px;border:1px solid #e8d5df;padding:8px 12px;color:#802a50;background:#fff}
 .wow-page-editor .wow-page-edit-save{color:white;background:#8C103A;border-color:#8C103A}
 .wow-page-editor .wow-page-edit-cancel{background:#f9f4f6}
-.wow-page-editor button[hidden]{display:none}
+.wow-page-editor button[hidden]{display:none}.wow-page-editor[hidden]{display:none}
 #wow-page-edit-status{font-size:11px;color:#887381;max-width:300px;text-align:right}
 body.wow-editing .wow-editable{outline:1px dashed #dba6ba;outline-offset:3px;border-radius:3px;cursor:text;min-height:1em}
 body.wow-editing .wow-editable:hover,body.wow-editing .wow-editable:focus{outline:2px solid #a83e69;background:#fff4f7}
@@ -875,7 +875,7 @@ window.addEventListener('beforeunload',e=>{
  const dirty=Array.from(nodes).some(([key,el])=>getValue(el)!==initial.get(key));
  if(dirty){e.preventDefault();e.returnValue=''}
 });
-setup();fetchRemote();document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&!editing)fetchRemote()});
+setup();fetchRemote();const research=$('timoresearch'),bar=$('wow-page-editor');if(research&&bar){const refreshBar=()=>{bar.hidden=!research.hidden&&!editing};new MutationObserver(refreshBar).observe(research,{attributes:true,attributeFilter:['hidden']});refreshBar()}document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&!editing)fetchRemote()});
 setInterval(()=>{if(!editing)fetchRemote()},30000);
 })();
 </script></body></html>
