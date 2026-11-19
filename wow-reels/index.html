@@ -255,12 +255,18 @@ body{margin:0;padding:0!important;min-height:100vh;background:linear-gradient(12
 .system-wednesday b{font-size:14px;color:#4d152d}
 .system-wednesday p{font-size:13px;margin:5px 0 0;color:#664553;line-height:1.5}
 @media(max-width:660px){.reels20-kpis.system-volume{grid-template-columns:1fr}.system-goal{padding:18px}.system-wednesday{align-items:flex-start;flex-wrap:wrap}}
+</style><style id="ideas-board-style">
+.ideas-header{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:14px;flex-wrap:wrap}.ideas-header h2{font-size:27px;color:#5c0a2b;margin:3px 0}.ideas-header p:last-child{font-size:12px;color:#7b6872;margin:0}.ideas-notice{background:#fff6e5;border:1px solid #f0dfbc;color:#7b5b2d;padding:10px 13px;border-radius:11px;font-size:11px;line-height:1.5;margin:0 0 17px}
+.ideas-board{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;align-items:start}.ideas-column{background:#fbf4f7;border:1px solid #f1e3e9;border-radius:15px;padding:12px;min-height:260px}.ideas-col-title{display:flex;align-items:center;gap:8px;color:#4a1b31;margin:2px 2px 13px;font-size:14px}.ideas-count{margin-left:auto;background:#fff;border-radius:999px;padding:3px 8px;font-size:11px;color:#81556b}.ideas-dot{width:9px;height:9px;border-radius:100%}.ideas-dot.new{background:#9e204b}.ideas-dot.later{background:#d7a447}.ideas-dot.doing{background:#2e8a69}.ideas-list{display:flex;flex-direction:column;gap:9px}.ideas-card{background:white;border:1px solid #efdee6;border-radius:11px;padding:12px;box-shadow:0 2px 7px #8c103a08;cursor:pointer;transition:box-shadow .15s}.ideas-card:hover{box-shadow:0 5px 15px #8c103a20}.ideas-card h4{font-size:12.5px;line-height:1.4;color:#3b1729;margin:0 0 7px;font-weight:750}.ideas-card p{font-size:11px;color:#806b75;margin:0 0 9px;line-height:1.5;overflow-wrap:anywhere}.ideas-card-footer{display:flex;gap:7px;align-items:center;flex-wrap:wrap}.ideas-card-footer select{font:inherit;font-size:10px;color:#7d1a41;background:#fff1f5;border:1px solid #f1d6e2;border-radius:7px;padding:6px;max-width:100%;cursor:pointer}.ideas-due{font-size:10px;color:#7e5266;background:#fcebf1;padding:5px 7px;border-radius:7px}.ideas-due.missing{color:#ad314e;background:#fff0f1}.ideas-empty{font-size:11px;color:#947d88;text-align:center;padding:18px 4px}
+.ideas-dialog{border:1px solid #edd5df;border-radius:18px;padding:0;max-width:min(94vw,560px);width:100%;box-shadow:0 15px 70px #2a041155;color:#341728}.ideas-dialog::backdrop{background:#2a041199}.ideas-form{padding:22px;display:flex;flex-direction:column;gap:12px}.ideas-modal-head{display:flex;align-items:center;justify-content:space-between}.ideas-modal-head h3{margin:0;color:#64132f}.ideas-modal-head button{border:0;background:#fff0f5;color:#8c103a;border-radius:8px;padding:8px 12px;cursor:pointer}.ideas-form label{font-size:12px;font-weight:700;display:flex;flex-direction:column;gap:6px;color:#5e2c41}.ideas-form input,.ideas-form textarea,.ideas-form select{font:inherit;font-size:13px;border:1px solid #e9cfd9;border-radius:9px;padding:10px 11px;background:#fff;color:#341728;width:100%;box-sizing:border-box}.ideas-form textarea{resize:vertical}.ideas-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.ideas-form-actions{display:flex;justify-content:flex-end;gap:12px;align-items:center;margin-top:4px}.ideas-danger{border:0;background:transparent;color:#aa3152;cursor:pointer;margin-right:auto}.ideas-dialog .primary-action{padding:11px 17px}
+@media(max-width:1000px){.ideas-board{grid-template-columns:1fr}.ideas-column{min-height:100px}.ideas-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:550px){.ideas-list{grid-template-columns:1fr}.ideas-form-grid{grid-template-columns:1fr}.ideas-form{padding:15px}}
 </style></head><body><main class="shell"><h1 class="brand-title"><span class="brand-clapper" aria-hidden="true"><svg viewBox="0 0 56 60" fill="none" width="46" height="48" stroke="currentColor" stroke-width="2.8" stroke-linejoin="round"><rect x="9" y="21" width="38" height="31" rx="5"/><path d="M9 21L6 11Q5 7 10 6L43 2Q47 2 48 7L50 16Z"/><path d="M17 6l8 12M32 4l8 13M14 30h30"/><path d="M26 35l10 6-10 6z" fill="currentColor" stroke="none"/></svg></span>КОНТЕНТ-БАНК</h1><div class="review-dashboard"><strong>Решение Насти</strong><span class="review-chip">✅ В работу: <b id="work-count">0</b></span><span class="review-chip">🤔 Подумаю: <b id="think-count">0</b></span><span class="review-chip">👎 Не нравится: <b id="no-count">0</b></span></div><div class="panel"><div class="workspace"><div aria-label="Разделы контент-банка" class="sidebar" role="navigation">
 
 <div class="sidebar-heading">РАЗДЕЛЫ</div>
 <button class="nav-root active" onclick="openGroup('reels',this)" type="button"><span class="nav-icon instagram-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5"/><circle cx="12" cy="12" r="4.4"/><circle cx="17.7" cy="6.6" r="1" fill="currentColor" stroke="none"/></svg></span><span>Reels</span></button>
 
 <button aria-controls="reels20" aria-selected="false" class="nav-root" onclick="tab('reels20',this)" type="button"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M3 9h18M9 9v12M13 13h5M13 17h5"/></svg></span><span>Система</span></button>
+<button aria-controls="ideasboard" aria-selected="false" class="nav-root" onclick="tab('ideasboard',this)" type="button"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="3" width="8" height="18" rx="2"/><rect x="13" y="3" width="8" height="11" rx="2"/><path d="M13 18h8M17 14v8"/></svg></span><span>Банк идей</span></button>
 <button aria-controls="youtube" aria-selected="false" class="nav-root" onclick="tab('youtube',this)" type="button"><span class="nav-icon youtube-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22"><rect x="1" y="4" width="22" height="16" rx="5" fill="#e62117"/><path d="M10 8.3 16 12l-6 3.7z" fill="white"/></svg></span><span>YouTube</span></button>
 
 </div><div class="workspace-content"><div class="content-section-name">Reels</div><div class="subnav" id="reels-subnav">
@@ -298,6 +304,22 @@ body{margin:0;padding:0!important;min-height:100vh;background:linear-gradient(12
 <div class="reels20-block system-responsibility"><h3>02. Распределение ответственности</h3><div class="reels20-table-wrap"><table class="reels20-table"><thead><tr><th scope="col">Направление</th><th scope="col">Саша</th><th scope="col">Настя</th></tr></thead><tbody><tr><th scope="row">Контент-план</th><td>Контролирует план-факт</td><td>Формирует месячный и недельный планы</td></tr><tr><th scope="row">Сценарии Reels</th><td>Готовит 40 сценариев в месяц; по ходу работы предлагает новые идеи</td><td>Отбирает 20 сценариев Саши; ещё 10 пишет самостоятельно или записывает в моменте. Также предлагает идеи</td></tr><tr><th scope="row">Карусели</th><td>Готовит 30 каруселей в месяц</td><td>Выбирает 20 каруселей Саши; ещё 10 готовит самостоятельно</td></tr><tr><th scope="row">Аналитика Reels</th><td>Раз в месяц анализирует просмотры, подписки, удержание и пересылки, выявляет закономерности и присылает корректировки форматов</td><td>Финально согласовывает предложенные корректировки</td></tr><tr><th scope="row">A/B-тестирование</th><td>Планирует гипотезы, ведёт таблицу тестов и фиксирует результаты</td><td>Согласовывает тесты и реализует варианты хуков и подачи</td></tr><tr><th scope="row">Трафик</th><td>Анализирует источники трафика, стоимость подписчика и эффективность продвижения</td><td>Согласовывает приоритеты продвижения</td></tr><tr><th scope="row">Производство</th><td>Организует задачи, контролирует монтаж и публикации</td><td>Снимает Reels, передаёт исходники, согласовывает финальные материалы</td></tr></tbody></table></div></div>
 <div class="reels20-block system-week"><h3>03. Еженедельная передача материалов</h3><div class="system-wednesday"><span class="system-weekday">СРЕДА</span><div><b>Саша присылает Насте</b><p>10 сценариев Reels и 10 каруселей каждую среду.</p></div></div></div>
 </section>
+<section id="ideasboard" hidden>
+<div class="ideas-header"><div><p class="reels20-eyebrow">Все идеи команды в одном месте</p><h2>Банк идей</h2><p>Переносим задумки из чатов и встреч в работу, чтобы ничего не потерять.</p></div><button class="primary-action" id="ideas-add" type="button">+ Добавить идею</button></div>
+<div class="ideas-notice" id="ideas-sync-notice"><b>Локальная версия:</b> пока изменения сохраняются только в этом браузере. Общая синхронизация для команды ещё не подключена.</div>
+<div class="ideas-board" id="ideas-board">
+<div class="ideas-column" data-column="new"><div class="ideas-col-title"><span class="ideas-dot new"></span><b>Новая</b><span class="ideas-count" id="ideas-count-new">0</span></div><div class="ideas-list" id="ideas-list-new"></div></div>
+<div class="ideas-column" data-column="later"><div class="ideas-col-title"><span class="ideas-dot later"></span><b>На будущее</b><span class="ideas-count" id="ideas-count-later">0</span></div><div class="ideas-list" id="ideas-list-later"></div></div>
+<div class="ideas-column" data-column="doing"><div class="ideas-col-title"><span class="ideas-dot doing"></span><b>В работе</b><span class="ideas-count" id="ideas-count-doing">0</span></div><div class="ideas-list" id="ideas-list-doing"></div></div>
+</div>
+<dialog id="ideas-dialog" class="ideas-dialog"><form id="ideas-form" class="ideas-form"><div class="ideas-modal-head"><h3 id="ideas-modal-title">Добавить идею</h3><button type="button" id="ideas-close" aria-label="Закрыть">✕</button></div>
+<label>Название идеи<input id="ideas-title" required maxlength="180" placeholder="Например, банк сторис для пустых дней"></label>
+<label>Описание / текст из чата<textarea id="ideas-description" rows="4" placeholder="Скопируйте сообщение или опишите идею своими словами"></textarea></label>
+<label>Референс или ссылка<input id="ideas-link" type="url" placeholder="https://..."></label>
+<div class="ideas-form-grid"><label>Статус<select id="ideas-status"><option value="new">Новая</option><option value="later">На будущее</option><option value="doing">В работе</option></select></label><label>Срок реализации<input id="ideas-deadline" type="date"></label></div>
+<label>Результат / вывод<textarea id="ideas-result" rows="2" placeholder="Заполним после реализации"></textarea></label>
+<div class="ideas-form-actions"><button type="button" id="ideas-delete" class="ideas-danger" hidden>Удалить</button><button type="submit" class="primary-action">Сохранить идею</button></div></form></dialog>
+</section>
 <section hidden="" id="youtube">
 
 <div class="editor-toolbar"><button class="primary-action" id="youtube-add" type="button">+ Добавить выпуск</button></div>
@@ -318,9 +340,9 @@ function tab(id,btn){
     b.setAttribute('aria-selected',String(b===btn));
   });
   document.querySelectorAll('.workspace-content > section').forEach(s=>s.hidden=s.id!==id);
-  document.querySelectorAll('.sidebar .nav-root').forEach(b=>b.classList.toggle('active',id==='youtube'?b.getAttribute('aria-controls')==='youtube':id==='reels20'?b.getAttribute('aria-controls')==='reels20':id==='vault'?b.getAttribute('aria-controls')==='vault':b.getAttribute('aria-controls')!=='reels20'&&b.textContent.includes('Reels')));
+  document.querySelectorAll('.sidebar .nav-root').forEach(b=>b.classList.toggle('active',id==='youtube'?b.getAttribute('aria-controls')==='youtube':id==='reels20'?b.getAttribute('aria-controls')==='reels20':id==='ideasboard'?b.getAttribute('aria-controls')==='ideasboard':id==='vault'?b.getAttribute('aria-controls')==='vault':b.getAttribute('aria-controls')!=='reels20'&&b.textContent.includes('Reels')));
   const name=document.querySelector('.content-section-name');
-  if(name)name.textContent=id==='youtube'?'YouTube':id==='reels20'?'Система':id==='vault'?'Хранилище идей':'Reels';
+  if(name)name.textContent=id==='youtube'?'YouTube':id==='reels20'?'Система':id==='ideasboard'?'Банк идей':id==='vault'?'Хранилище идей':'Reels';
   const sub=document.getElementById('reels-subnav');
   if(sub)sub.hidden=!['mv','life','other','serial','personal'].includes(id);
   if(['mv','life','other','serial','personal'].includes(id))document.getElementById('reels-subnav').classList.remove('collapsed');
@@ -451,4 +473,63 @@ for(const kind of ['youtube','vault']){
  if(shell&&side){shell.insertBefore(side,shell.firstChild)}
  const selected=document.querySelector('.subnav .nav-sub.active');
  if(selected)selected.setAttribute('aria-selected','true');
+})();</script><script id="ideas-board-script">(function(){
+const KEY='wow_ideas_board_v1';
+const seed=[
+{title:'Переделать обложки Reels',description:'Сделать надписи на обложках лучше читаемыми.'},
+{title:'Банк сторис на пустые дни',description:'Подготовить сторис, которые можно публиковать без участия Насти.'},
+{title:'Карусель по кейсу Ани по личному бренду',description:'Подготовить пост-карусель по кейсу Ани.',link:'https://www.instagram.com/p/Df2tcpAjaok/?dmpr=MXN1b2VlZmFmNnZyaQ=='},
+{title:'Ролик по примеру Жилина после вебинара',description:'Поставить в контент-план после вебинара, чтобы не потерять.'},
+{title:'Уникализация и массовый выпуск пробных Reels',description:'Продумать систему уникализации пробных роликов и массовой публикации.'},
+{title:'YouTube → Shorts',description:'Нарезать видео YouTube на Shorts и вести зрителей на полный выпуск.'},
+{title:'Разнообразить аккаунт школы',description:'Обсудить сочетание мультфильмов, кейсов и экспертных Reels.'}
+].map((x,i)=>({id:'initial-'+(i+1),status:'new',deadline:'',result:'',...x}));
+let ideas;
+try{const v=JSON.parse(localStorage.getItem(KEY));ideas=Array.isArray(v)?v:seed}catch(e){ideas=seed}
+const statuses={new:'Новая',later:'На будущее',doing:'В работе'};
+const $=id=>document.getElementById(id);
+let editing=null;
+function save(){localStorage.setItem(KEY,JSON.stringify(ideas))}
+function make(tag,cls,content){const e=document.createElement(tag);if(cls)e.className=cls;if(content!==undefined)e.textContent=content;return e}
+function render(){
+ for(const status of Object.keys(statuses)){
+ const list=$('ideas-list-'+status);list.replaceChildren();
+ const rows=ideas.filter(x=>x.status===status);
+ $('ideas-count-'+status).textContent=rows.length;
+ if(!rows.length)list.append(make('div','ideas-empty','Пока нет идей'));
+ rows.forEach(item=>{
+ const card=make('article','ideas-card');card.tabIndex=0;card.setAttribute('role','button');card.setAttribute('aria-label','Редактировать идею: '+item.title);
+ card.append(make('h4','',item.title));
+ if(item.description)card.append(make('p','',item.description.length>140?item.description.slice(0,137)+'…':item.description));
+ const foot=make('div','ideas-card-footer');const sel=make('select');
+ for(const [key,name] of Object.entries(statuses)){const opt=make('option','',name);opt.value=key;sel.append(opt)}
+ sel.value=item.status;sel.setAttribute('aria-label','Статус идеи: '+item.title);
+ sel.addEventListener('click',e=>e.stopPropagation());
+ sel.addEventListener('change',e=>{e.stopPropagation();if(sel.value==='doing'&&!item.deadline){open(item.id);$('ideas-status').value='doing';$('ideas-deadline').focus();return}item.status=sel.value;save();render()});
+ foot.append(sel);
+ if(item.status==='doing'){const due=make('span','ideas-due'+(!item.deadline?' missing':''),item.deadline?'Срок: '+item.deadline.split('-').reverse().join('.'):'Укажите срок');foot.append(due)}
+ card.append(foot);card.addEventListener('click',()=>open(item.id));card.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target===card)open(item.id)});list.append(card)
+ })
+ }
+}
+function open(id){
+ editing=id;const item=ideas.find(x=>x.id===id)||{title:'',description:'',link:'',status:'new',deadline:'',result:''};
+ $('ideas-modal-title').textContent=id?'Редактировать идею':'Добавить идею';
+ for(const k of ['title','description','link','status','deadline','result'])$('ideas-'+k).value=item[k]|| (k==='status'?'new':'');
+ $('ideas-delete').hidden=!id;$('ideas-dialog').showModal();
+}
+$('ideas-add').addEventListener('click',()=>open(null));
+$('ideas-close').addEventListener('click',()=>$('ideas-dialog').close());
+$('ideas-form').addEventListener('submit',e=>{
+ e.preventDefault();const data={};for(const k of ['title','description','link','status','deadline','result'])data[k]=$('ideas-'+k).value.trim();
+ if(data.status==='doing'&&!data.deadline){$('ideas-deadline').setCustomValidity('Для идеи в работе укажите срок реализации');$('ideas-deadline').reportValidity();return}
+ $('ideas-deadline').setCustomValidity('');
+ if(editing){const i=ideas.findIndex(x=>x.id===editing);if(i>=0)ideas[i]={...ideas[i],...data}}
+ else ideas.unshift({id:'idea-'+Date.now()+'-'+Math.random().toString(36).slice(2,7),...data});
+ save();render();$('ideas-dialog').close()
+});
+$('ideas-status').addEventListener('change',()=>{$('ideas-deadline').setCustomValidity('')});
+$('ideas-deadline').addEventListener('input',()=>{$('ideas-deadline').setCustomValidity('')});
+$('ideas-delete').addEventListener('click',()=>{if(!editing||!confirm('Удалить эту идею?'))return;ideas=ideas.filter(x=>x.id!==editing);save();render();$('ideas-dialog').close()});
+render();
 })();</script></body></html>
