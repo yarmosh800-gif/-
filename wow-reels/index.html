@@ -263,6 +263,32 @@ body{margin:0;padding:0!important;min-height:100vh;background:linear-gradient(12
 .ideas-board{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;align-items:start}.ideas-column{background:#fbf4f7;border:1px solid #f1e3e9;border-radius:15px;padding:12px;min-height:260px}.ideas-col-title{display:flex;align-items:center;gap:8px;color:#4a1b31;margin:2px 2px 13px;font-size:14px}.ideas-count{margin-left:auto;background:#fff;border-radius:999px;padding:3px 8px;font-size:11px;color:#81556b}.ideas-dot{width:9px;height:9px;border-radius:100%}.ideas-dot.new{background:#9e204b}.ideas-dot.later{background:#d7a447}.ideas-dot.doing{background:#2e8a69}.ideas-list{display:flex;flex-direction:column;gap:9px}.ideas-card{background:white;border:1px solid #efdee6;border-radius:11px;padding:12px;box-shadow:0 2px 7px #8c103a08;cursor:pointer;transition:box-shadow .15s}.ideas-card:hover{box-shadow:0 5px 15px #8c103a20}.ideas-card h4{font-size:12.5px;line-height:1.4;color:#3b1729;margin:0 0 7px;font-weight:750}.ideas-card p{font-size:11px;color:#806b75;margin:0 0 9px;line-height:1.5;overflow-wrap:anywhere}.ideas-card-footer{display:flex;gap:7px;align-items:center;flex-wrap:wrap}.ideas-card-footer select{font:inherit;font-size:10px;color:#7d1a41;background:#fff1f5;border:1px solid #f1d6e2;border-radius:7px;padding:6px;max-width:100%;cursor:pointer}.ideas-due{font-size:10px;color:#7e5266;background:#fcebf1;padding:5px 7px;border-radius:7px}.ideas-due.missing{color:#ad314e;background:#fff0f1}.ideas-empty{font-size:11px;color:#947d88;text-align:center;padding:18px 4px}
 .ideas-dialog{border:1px solid #edd5df;border-radius:18px;padding:0;max-width:min(94vw,560px);width:100%;box-shadow:0 15px 70px #2a041155;color:#341728}.ideas-dialog::backdrop{background:#2a041199}.ideas-form{padding:22px;display:flex;flex-direction:column;gap:12px}.ideas-modal-head{display:flex;align-items:center;justify-content:space-between}.ideas-modal-head h3{margin:0;color:#64132f}.ideas-modal-head button{border:0;background:#fff0f5;color:#8c103a;border-radius:8px;padding:8px 12px;cursor:pointer}.ideas-form label{font-size:12px;font-weight:700;display:flex;flex-direction:column;gap:6px;color:#5e2c41}.ideas-form input,.ideas-form textarea,.ideas-form select{font:inherit;font-size:13px;border:1px solid #e9cfd9;border-radius:9px;padding:10px 11px;background:#fff;color:#341728;width:100%;box-sizing:border-box}.ideas-form textarea{resize:vertical}.ideas-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.ideas-form-actions{display:flex;justify-content:flex-end;gap:12px;align-items:center;margin-top:4px}.ideas-danger{border:0;background:transparent;color:#aa3152;cursor:pointer;margin-right:auto}.ideas-dialog .primary-action{padding:11px 17px}
 @media(max-width:1000px){.ideas-board{grid-template-columns:1fr}.ideas-column{min-height:100px}.ideas-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:550px){.ideas-list{grid-template-columns:1fr}.ideas-form-grid{grid-template-columns:1fr}.ideas-form{padding:15px}}
+</style><style id="ideas-tests-refinement">
+.ideas-column{background:#f9f7f8;border:1px solid #eee5e9;border-radius:18px;padding:14px;min-height:260px}
+.ideas-col-title{margin:1px 3px 15px;font-size:13px;letter-spacing:-.01em}
+.ideas-card{background:#fff;border:1px solid #ece4e8;border-left:4px solid #d9b6c7;border-radius:13px;padding:15px 14px;box-shadow:0 3px 12px rgba(65,30,48,.04);transition:transform .16s,box-shadow .16s}
+.ideas-card:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(65,30,48,.1)}
+.ideas-card h4{font-size:13px;line-height:1.45;margin-bottom:8px;color:#432139}
+.ideas-card p{font-size:11px;line-height:1.65;color:#776670;margin-bottom:12px}
+.ideas-card-footer{justify-content:flex-start}
+.ideas-card.idea-success{background:#f0faf3;border-color:#bde3c8;border-left-color:#29935a}
+.ideas-card.idea-failure{background:#fff3f3;border-color:#edc1c1;border-left-color:#d45858}
+.idea-outcome-badge{border-radius:99px;padding:5px 8px;font-size:10px;font-weight:700;color:#37784c;background:#d6f0df}
+.idea-failure .idea-outcome-badge{background:#f9dede;color:#a23a3a}
+.reels-tests-table{min-width:780px}
+.reels-tests-table th:nth-child(1){width:41%}
+.reels-tests-table th:nth-child(2){width:13%}
+.reels-tests-table th:nth-child(3){width:16%}
+.reels-tests-table th:nth-child(4){width:17%}
+.reels-tests-table th:nth-child(5){width:9%}
+.reels-tests-table th:nth-child(6){width:4%}
+.reels-test-name{font-size:12.5px;font-weight:800;line-height:1.45;color:#4a1a33;display:block}
+.reels-test-subtitle{font-size:11.5px;font-weight:400;line-height:1.6;color:#76616d;margin-top:6px}
+.reels-tests-table tr.reels-test-success td{background:#eff9f1;border-top-color:#c7e8d0}
+.reels-tests-table tr.reels-test-failure td{background:#fff0f1;border-top-color:#efc9cc}
+.reels-outcome-tag{font-weight:750;font-size:10px!important;color:#8d7f87}
+.reels-test-success .reels-outcome-tag{color:#287c46}
+.reels-test-failure .reels-outcome-tag{color:#b63f4a}
 </style></head><body><main class="shell"><h1 class="brand-title"><span class="brand-clapper" aria-hidden="true"><svg viewBox="0 0 56 60" fill="none" width="46" height="48" stroke="currentColor" stroke-width="2.8" stroke-linejoin="round"><rect x="9" y="21" width="38" height="31" rx="5"/><path d="M9 21L6 11Q5 7 10 6L43 2Q47 2 48 7L50 16Z"/><path d="M17 6l8 12M32 4l8 13M14 30h30"/><path d="M26 35l10 6-10 6z" fill="currentColor" stroke="none"/></svg></span>КОНТЕНТ-БАНК</h1><div class="review-dashboard"><strong>Решение Насти</strong><span class="review-chip">✅ В работу: <b id="work-count">0</b></span><span class="review-chip">🤔 Подумаю: <b id="think-count">0</b></span><span class="review-chip">👎 Не нравится: <b id="no-count">0</b></span></div><div class="panel"><div class="workspace"><div aria-label="Разделы контент-банка" class="sidebar" role="navigation">
 
 <div class="sidebar-heading">РАЗДЕЛЫ</div>
@@ -316,7 +342,7 @@ body{margin:0;padding:0!important;min-height:100vh;background:linear-gradient(12
 </div>
 <div class="reels-tests-section" id="reels-tests-section">
   <div class="reels-tests-header"><h3>Тесты Reels</h3><button type="button" class="primary-action" id="reels-tests-add">+ Добавить тест</button></div>
-  <div class="reels-tests-scroll"><table class="reels-tests-table"><thead><tr><th>Гипотеза</th><th>Идея теста</th><th>Срок реализации</th><th>Результат</th><th>Вывод</th><th></th></tr></thead><tbody id="reels-tests-body"></tbody></table></div>
+  <div class="reels-tests-scroll"><table class="reels-tests-table"><thead><tr><th>Гипотеза / идея теста</th><th>Срок реализации</th><th>Результат</th><th>Вывод</th><th>Оценка</th><th></th></tr></thead><tbody id="reels-tests-body"></tbody></table></div>
   <p id="reels-tests-error" class="reels-tests-error" aria-live="polite"></p>
 </div>
 <dialog id="reels-tests-dialog" class="ideas-dialog"><form id="reels-tests-form" class="ideas-form">
@@ -324,7 +350,7 @@ body{margin:0;padding:0!important;min-height:100vh;background:linear-gradient(12
   <label>Гипотеза<input id="reels-test-hypothesis" maxlength="500" required placeholder="Что хотим проверить?"></label>
   <label>Идея теста<textarea id="reels-test-idea" rows="3" placeholder="Как именно будем тестировать?"></textarea></label>
   <label>Срок реализации<input id="reels-test-deadline" type="date"></label>
-  <label>Результат<textarea id="reels-test-result" rows="3" placeholder="Фактические показатели и наблюдения"></textarea></label>
+  <label>Результат<textarea id="reels-test-result" rows="3" placeholder="Фактические показатели и наблюдения"></textarea></label><label>Итог теста<select id="reels-test-outcome"><option value="pending">Пока не оценён</option><option value="success">✅ Сработало</option><option value="failure">❌ Не сработало</option></select></label>
   <label>Вывод<textarea id="reels-test-conclusion" rows="3" placeholder="Что поняли и что делаем дальше?"></textarea></label>
   <div class="ideas-form-actions"><button type="button" id="reels-test-delete" class="ideas-danger" hidden>Удалить</button><button type="submit" class="primary-action">Сохранить тест</button></div>
 </form></dialog>
@@ -333,7 +359,7 @@ body{margin:0;padding:0!important;min-height:100vh;background:linear-gradient(12
 <label>Описание / текст из чата<textarea id="ideas-description" rows="4" placeholder="Скопируйте сообщение или опишите идею своими словами"></textarea></label>
 <label>Референс или ссылка<input id="ideas-link" type="url" placeholder="https://..."></label>
 <div class="ideas-form-grid"><label>Статус<select id="ideas-status"><option value="new">Новая</option><option value="later">На будущее</option><option value="doing">В работе</option></select></label><label>Срок реализации<input id="ideas-deadline" type="date"></label></div>
-<label>Результат / вывод<textarea id="ideas-result" rows="2" placeholder="Заполним после реализации"></textarea></label>
+<label>Результат / вывод<textarea id="ideas-result" rows="2" placeholder="Заполним после реализации"></textarea></label><label>Итог идеи<select id="ideas-outcome"><option value="pending">Пока не оценена</option><option value="success">✅ Зашла</option><option value="failure">❌ Не зашла</option></select></label>
 <div class="ideas-form-actions"><button type="button" id="ideas-delete" class="ideas-danger" hidden>Удалить</button><button type="submit" class="primary-action">Сохранить идею</button></div></form></dialog>
 </section>
 <section hidden="" id="youtube">
@@ -521,11 +547,12 @@ function render(){
  $('ideas-count-'+status).textContent=rows.length;
  if(!rows.length)list.append(el('div','ideas-empty','Перетащите карточку сюда'));
  rows.forEach(item=>{
- const card=el('article','ideas-card');card.draggable=true;card.dataset.id=item.id;card.tabIndex=0;card.setAttribute('role','button');card.setAttribute('aria-label','Редактировать: '+item.title);
+ const card=el('article','ideas-card'+(item.outcome==='success'?' idea-success':item.outcome==='failure'?' idea-failure':''));card.draggable=true;card.dataset.id=item.id;card.tabIndex=0;card.setAttribute('role','button');card.setAttribute('aria-label','Редактировать: '+item.title);
  card.append(el('h4','',item.title));
  if(item.description)card.append(el('p','',item.description.length>140?item.description.slice(0,137)+'…':item.description));
  const foot=el('div','ideas-card-footer');
  if(status==='doing')foot.append(el('span','ideas-due'+(!item.deadline?' missing':''),item.deadline?'Срок: '+item.deadline.split('-').reverse().join('.'):'Укажите срок'));
+ if(item.outcome==='success')foot.append(el('span','idea-outcome-badge','✓ Зашла'));else if(item.outcome==='failure')foot.append(el('span','idea-outcome-badge','✕ Не зашла'));
  if(item.link){const a=el('a','ideas-reference','Референс ↗');a.href=item.link;a.target='_blank';a.rel='noopener noreferrer';a.onclick=e=>e.stopPropagation();foot.append(a)}
  card.append(foot);
  card.addEventListener('dragstart',e=>{draggingId=item.id;e.dataTransfer.setData('text/plain',item.id);e.dataTransfer.effectAllowed='move';card.classList.add('ideas-dragging')});
@@ -555,16 +582,16 @@ document.querySelectorAll('.ideas-column').forEach(col=>{
  col.addEventListener('drop',e=>{e.preventDefault();e.stopPropagation();col.classList.remove('ideas-drop-target');const id=e.dataTransfer.getData('text/plain')||draggingId;const target=e.target.closest('.ideas-card');if(id)move(id,status,target&&target.dataset.id!==id?target.dataset.id:null)});
 });
 function open(id){
- editing=id;const item=ideas.find(x=>x.id===id)||{title:'',description:'',link:'',status:'new',deadline:'',result:''};
+ editing=id;const item=ideas.find(x=>x.id===id)||{title:'',description:'',link:'',status:'new',deadline:'',result:'',outcome:'pending'};
  $('ideas-modal-title').textContent=id?'Редактировать идею':'Добавить идею';
- for(const k of ['title','description','link','status','deadline','result'])$('ideas-'+k).value=item[k]|| (k==='status'?'new':'');
+ for(const k of ['title','description','link','status','deadline','result','outcome'])$('ideas-'+k).value=item[k]|| (k==='status'?'new':k==='outcome'?'pending':'');
  $('ideas-delete').hidden=!id;$('ideas-dialog').showModal();
 }
 $('ideas-add').onclick=()=>open(null);
 $('ideas-close').onclick=()=>$('ideas-dialog').close();
 $('ideas-form').addEventListener('submit',async e=>{
  e.preventDefault();
- const data={};for(const k of ['title','description','link','status','deadline','result'])data[k]=$('ideas-'+k).value.trim();
+ const data={};for(const k of ['title','description','link','status','deadline','result','outcome'])data[k]=$('ideas-'+k).value.trim();
  if(data.status==='doing'&&!data.deadline){$('ideas-deadline').setCustomValidity('Укажите срок для идеи в работе');$('ideas-deadline').reportValidity();return}
  $('ideas-deadline').setCustomValidity('');
  data.deadline=data.deadline||null;data.updated_at=new Date().toISOString();
@@ -584,7 +611,7 @@ render();refresh();setInterval(refresh,4000);document.addEventListener('visibili
 'use strict';
 const API='https://mkwupwbpgfdvaciowgel.supabase.co/rest/v1/wow_reels_tests';
 const KEY='sb_publishable_OfuG19Samqr0tCsQmIr9eA_QBVwa98X';
-const $=id=>document.getElementById(id),FIELDS=['hypothesis','idea','deadline','result','conclusion'];
+const $=id=>document.getElementById(id),FIELDS=['hypothesis','idea','deadline','result','conclusion','outcome'];
 const HEAD={apikey:KEY,'Content-Type':'application/json'};
 let rows=[],editing=null,busy=false,dialog=$('reels-tests-dialog');
 async function query(method,path='',data){
@@ -597,7 +624,10 @@ function render(){
  const body=$('reels-tests-body');body.replaceChildren();
  if(!rows.length){const tr=document.createElement('tr'),td=cell('Пока нет тестов. Добавьте первую гипотезу.');td.colSpan=6;td.className='reels-test-empty';tr.append(td);body.append(tr);return}
  rows.forEach(item=>{
- const tr=document.createElement('tr');for(const key of FIELDS){let value=item[key];if(key==='deadline'&&value)value=value.split('-').reverse().join('.');tr.append(cell(value))}
+ const tr=document.createElement('tr');tr.className=item.outcome==='success'?'reels-test-success':item.outcome==='failure'?'reels-test-failure':'';
+ const titleCell=document.createElement('td');const heading=document.createElement('strong');heading.className='reels-test-name';heading.textContent=item.hypothesis||'Без названия';const subtitle=document.createElement('div');subtitle.className='reels-test-subtitle';subtitle.textContent=item.idea||'';titleCell.append(heading,subtitle);tr.append(titleCell);
+ for(const key of ['deadline','result','conclusion']){let value=item[key];if(key==='deadline'&&value)value=value.split('-').reverse().join('.');tr.append(cell(value))}
+ const outcomeCell=cell(item.outcome==='success'?'✓ Сработало':item.outcome==='failure'?'✕ Не сработало':'—');outcomeCell.className='reels-outcome-tag';tr.append(outcomeCell);
  const actions=document.createElement('td'),edit=document.createElement('button');edit.type='button';edit.className='reels-test-edit';edit.textContent='✎';edit.title='Редактировать тест';edit.setAttribute('aria-label','Редактировать тест');edit.onclick=()=>open(item.id);actions.append(edit);tr.append(actions);body.append(tr)
  });
 }
@@ -606,9 +636,9 @@ async function refresh(){
  try{const next=await query('GET','?select=*&order=sort_order.asc,created_at.asc');$('reels-tests-error').textContent='';if(JSON.stringify(rows)!==JSON.stringify(next)){rows=next;render()}}catch(err){$('reels-tests-error').textContent='Ошибка синхронизации. Повторяем подключение…'}
 }
 function open(id){
- editing=id;const item=rows.find(x=>x.id===id)||{hypothesis:'',idea:'',deadline:'',result:'',conclusion:''};
+ editing=id;const item=rows.find(x=>x.id===id)||{hypothesis:'',idea:'',deadline:'',result:'',conclusion:'',outcome:'pending'};
  $('reels-tests-dialog-heading').textContent=id?'Редактировать тест':'Добавить тест';
- for(const field of FIELDS)$('reels-test-'+field).value=item[field]||'';
+ for(const field of FIELDS)$('reels-test-'+field).value=item[field]||(field==='outcome'?'pending':'');
  $('reels-test-delete').hidden=!id;dialog.showModal();
 }
 $('reels-tests-add').onclick=()=>open(null);
