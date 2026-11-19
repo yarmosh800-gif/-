@@ -774,7 +774,7 @@ const EDITABLE_SECTIONS=['mv','life','other','serial','personal','reels20','idea
 const $=id=>document.getElementById(id);
 const btn=$('wow-page-edit-start'),saveBtn=$('wow-page-edit-save'),cancelBtn=$('wow-page-edit-cancel'),status=$('wow-page-edit-status');
 if(!btn||!saveBtn||!cancelBtn)return;
-const selectors='h2,h3,h4,h5,p,li,th,td,.name,.section-title,.section-title span,.serial-intro,.serial-foot,.ep-title,.ep-mech,.idea-title,.idea-hook,.idea-heading,.season-title,.season-desc,.season-eyebrow,.series-concept .concept-packs span,.system-goal-label,.system-goal strong,.system-volume b,.system-volume span,.system-account b,.system-account span:not(.system-ig-icon),.system-weekday,.system-wednesday b,.system-wednesday p,.end,.label';
+const selectors='h2,h3,h4,h5,p,li,th,td,.wow-raw-content,.name,.section-title,.section-title span,.serial-intro,.serial-foot,.ep-title,.ep-mech,.idea-title,.idea-hook,.idea-heading,.season-title,.season-desc,.season-eyebrow,.series-concept .concept-packs span,.system-goal-label,.system-goal strong,.system-volume b,.system-volume span,.system-account b,.system-account span:not(.system-ig-icon),.system-weekday,.system-wednesday b,.system-wednesday p,.end,.label';
 const nodes=new Map(),initial=new Map(),originalMarkup=new Map();
 let remote={fields:{}},editing=false,loading=false,offline=false;
 const setStatus=(s,error)=>{status.textContent=s||'';status.style.color=error?'#b63d54':'#887381'};
@@ -801,6 +801,12 @@ function available(el){
 function setup(){
  for(const id of EDITABLE_SECTIONS){
   const section=$(id);if(!section)continue;
+  section.querySelectorAll('.item .content,.series-concept,.serial-intro,.serial-foot').forEach(block=>{
+   Array.from(block.childNodes).forEach(node=>{
+    if(node.nodeType!==3||!node.textContent.trim())return;
+    const span=document.createElement('span');span.className='wow-raw-content';span.textContent=node.textContent;node.replaceWith(span);
+   });
+  });
   section.querySelectorAll(selectors).forEach(el=>{
    if(!available(el))return;
    if(el.closest('.wow-editable')||el.querySelector('.wow-editable'))return;
