@@ -412,7 +412,7 @@ function tab(id,btn){
   document.querySelectorAll('.workspace-content > section').forEach(s=>s.hidden=s.id!==id);
   document.querySelectorAll('.sidebar .nav-root').forEach(b=>b.classList.toggle('active',id==='youtube'?b.getAttribute('aria-controls')==='youtube':id==='reels20'?b.getAttribute('aria-controls')==='reels20':id==='ideasboard'?b.getAttribute('aria-controls')==='ideasboard':id==='timoresearch'?b.getAttribute('aria-controls')==='timoresearch':id==='vault'?b.getAttribute('aria-controls')==='vault':b.getAttribute('aria-controls')!=='reels20'&&b.textContent.includes('Reels')));
   const name=document.querySelector('.content-section-name');
-  if(name)name.textContent=id==='youtube'?'YouTube':id==='reels20'?'Система':id==='ideasboard'?'Банк идей':id==='timoresearch'?'Анализ Тимочки':id==='vault'?'Хранилище идей':'Reels';
+  if(name)name.textContent=id==='youtube'?'YouTube':id==='reels20'?'Система':id==='ideasboard'?'Банк идей':id==='timoresearch'?'Исследование Reels':id==='vault'?'Хранилище идей':'Reels';
   const sub=document.getElementById('reels-subnav');
   if(sub)sub.hidden=!['mv','life','other','serial','personal'].includes(id);
   if(['mv','life','other','serial','personal'].includes(id))document.getElementById('reels-subnav').classList.remove('collapsed');
