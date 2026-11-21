@@ -396,6 +396,12 @@ body.wow-editing .wow-content-table td{min-height:42px}
 .reels-manual-actions{display:flex;justify-content:space-between;gap:10px;margin-top:5px}
 .reels-manual-actions .reels-manual-danger{background:transparent;border:1px solid #efbdc7;color:#b32e4d;border-radius:9px;cursor:pointer;padding:9px 12px}
 .reels-manual-actions [hidden]{display:none}
+</style><style id="reels-manual-numbers-style">
+.reels-manual-number{display:grid;place-items:center;flex:none;min-width:29px;width:29px;height:29px;border-radius:8px;background:#f8eef3;color:#84375e;font-size:11px;font-weight:800}
+.reels-manual-top{align-items:center}
+.reels-manual-top h3{margin:0;font-size:13px}
+#life .reels-manual-list{gap:0;margin:0}
+#life .reels-manual-card{padding:11px 12px;border-radius:0;box-shadow:none;border:0;border-bottom:1px solid #eee3e8}
 </style></head><body><main class="shell"><h1 class="brand-title"><span class="brand-clapper" aria-hidden="true"><svg viewBox="0 0 56 60" fill="none" width="46" height="48" stroke="currentColor" stroke-width="2.8" stroke-linejoin="round"><rect x="9" y="21" width="38" height="31" rx="5"/><path d="M9 21L6 11Q5 7 10 6L43 2Q47 2 48 7L50 16Z"/><path d="M17 6l8 12M32 4l8 13M14 30h30"/><path d="M26 35l10 6-10 6z" fill="currentColor" stroke="none"/></svg></span>КОНТЕНТ-БАНК</h1><div class="wow-page-editor" id="wow-page-editor"><button type="button" class="wow-page-edit-start" id="wow-page-edit-start" aria-pressed="false">✎ Редактировать</button><button type="button" class="wow-page-edit-save" id="wow-page-edit-save" hidden>Сохранить</button><button type="button" class="wow-page-edit-cancel" id="wow-page-edit-cancel" hidden>Отменить</button><span id="wow-page-edit-status" role="status" aria-live="polite"></span></div><div class="panel"><div class="workspace"><div aria-label="Разделы контент-банка" class="sidebar" role="navigation">
 
 <div class="sidebar-heading">РАЗДЕЛЫ</div>
@@ -966,10 +972,21 @@ function render(){
   let holder=root.querySelector(':scope > .reels-manual-list');
   if(!holder){holder=element('div','reels-manual-list');root.prepend(holder)}
   holder.replaceChildren();
-  items.filter(i=>i.section===group).forEach(item=>{
+  const fixed=[...root.querySelectorAll(':scope > details.item')];
+  const manual=items.filter(i=>i.section===group).slice().reverse();
+  // Place newly-added ideas after the first four existing ideas in the short-ideas section.
+  const insertAt=group==='life'?Math.min(4,fixed.length):fixed.length;
+  if(insertAt<fixed.length)fixed[insertAt].before(holder);
+  else if(fixed.length)fixed[fixed.length-1].after(holder);
+  else root.append(holder);
+  fixed.forEach((row,index)=>{
+   const num=row.querySelector(':scope > summary > .num');
+   if(num)num.textContent=String(index<insertAt?index+1:index+manual.length+1).padStart(2,'0');
+  });
+  manual.forEach((item,index)=>{
    const card=element('article','reels-manual-card');
    const heading=element('div','reels-manual-top');
-   heading.append(element('span','reels-manual-tag','МОЯ ИДЕЯ'));
+   heading.append(element('span','reels-manual-number',String(insertAt+index+1).padStart(2,'0')));
    heading.append(element('h3','',item.title));
    card.append(heading);
    if(item.hook){const p=element('p','');p.append(element('strong','', 'Хук: '),document.createTextNode(item.hook));card.append(p)}
