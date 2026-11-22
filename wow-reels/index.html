@@ -540,22 +540,53 @@ body.wow-editing .wow-content-table td{min-height:42px}
 <div class="editor-grid" id="vault-cards"></div>
 </section>
 </div></div></div></main><script>
-function tab(id,btn){
-  document.querySelectorAll('.sidebar [aria-controls], .workspace-content .subnav [aria-controls]').forEach(b=>{
-    b.classList.toggle('active',b===btn);
-    b.setAttribute('aria-selected',String(b===btn));
-  });
-  document.querySelectorAll('.workspace-content > section').forEach(s=>s.hidden=s.id!==id);
-  document.querySelectorAll('.sidebar .nav-root').forEach(b=>b.classList.toggle('active',id==='youtube'?b.getAttribute('aria-controls')==='youtube':id==='reels20'?b.getAttribute('aria-controls')==='reels20':id==='ideasboard'?b.getAttribute('aria-controls')==='ideasboard':id==='timoresearch'?b.getAttribute('aria-controls')==='timoresearch':id==='vault'?b.getAttribute('aria-controls')==='vault':b.getAttribute('aria-controls')!=='reels20'&&b.textContent.includes('Reels')));
-  const name=document.querySelector('.content-section-name');
-  if(name)name.textContent=id==='youtube'?'YouTube':id==='reels20'?'Система':id==='ideasboard'?'Банк идей':id==='timoresearch'?'Исследование Reels':id==='vault'?'Хранилище идей':'Reels';
-  const sub=document.getElementById('reels-subnav');
-  if(sub)sub.hidden=!['mv','life','other','serial','personal'].includes(id);
-  if(['mv','life','other','serial','personal'].includes(id))document.getElementById('reels-subnav').classList.remove('collapsed');
-}
-function openGroup(){
-  tab('mv',document.querySelector('[aria-controls="mv"]'));
-}
+/* Navigation repair: explicit event delegation, compatible with Safari and Chromium. */
+(function(){
+  'use strict';
+  const reelsIds = ['mv','life','other','serial','personal'];
+  const labels = {youtube:'YouTube',reels20:'Система',ideasboard:'Банк идей',timoresearch:'Исследование Reels',vault:'Хранилище идей'};
+  function navigate(id, btn) {
+    const target = document.getElementById(id);
+    if (!target || !target.matches('.workspace-content > section')) return;
+    document.querySelectorAll('.workspace-content > section').forEach(section => {
+      section.hidden = section !== target;
+    });
+    document.querySelectorAll('.workspace-content .subnav [aria-controls]').forEach(button => {
+      const active = button.getAttribute('aria-controls') === id;
+      button.classList.toggle('active', active);
+      button.setAttribute('aria-selected', String(active));
+    });
+    document.querySelectorAll('.sidebar .nav-root').forEach(button => {
+      const control = button.getAttribute('aria-controls');
+      const active = reelsIds.includes(id) ? (!control || control === 'reels') : control === id;
+      button.classList.toggle('active', active);
+      button.setAttribute('aria-selected', String(active));
+    });
+    const heading = document.querySelector('.content-section-name');
+    if (heading) heading.textContent = labels[id] || 'Reels';
+    const subnav = document.getElementById('reels-subnav');
+    if (subnav) {
+      subnav.hidden = !reelsIds.includes(id);
+      if (reelsIds.includes(id)) subnav.classList.remove('collapsed');
+    }
+  }
+  window.tab = navigate;
+  window.openGroup = function(){ navigate('mv'); };
+  document.addEventListener('click', function(event){
+    const button = event.target.closest('button.nav-root, button.nav-sub');
+    if (!button || !document.contains(button)) return;
+    const id = button.getAttribute('aria-controls');
+    if (id && document.getElementById(id)) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      navigate(id, button);
+    } else if (button.classList.contains('nav-root') && button.textContent.includes('Reels')) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      navigate('mv',button);
+    }
+  }, true);
+})();
 </script><script>(function(){
 const KEY='wow_reels_review_v1';
 const controls=[...document.querySelectorAll('[data-review-key]')];
