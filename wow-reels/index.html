@@ -513,59 +513,68 @@ function openGroup(){
   tab('mv',document.querySelector('[aria-controls="mv"]'));
 }
 </script><script>(function(){
-const KEY='wow_reels_review_v1';
-const controls=[...document.querySelectorAll('[data-review-key]')];
-let saved={};
-try{saved=JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch(e){}
-const filter=document.getElementById('status-filter');
+const BASE='https://mkwupwbpgfdvaciowgel.supabase.co/rest/v1/wow_reels_reviews';
+const KEY='sb_publishable_OfuG19Samqr0tCsQmIr9eA_QBVwa98X';
+const headers={apikey:KEY,'Content-Type':'application/json'};
+const controls=[...document.querySelectorAll('[data-review-key]')],filter=document.getElementById('status-filter');
+let saved={},loaded=false,busy=false;
+const names={work:'✅ В работу',think:'🤔 Подумаю',no:'👎 Не нравится'};
 const escapeCsv=v=>'"'+String(v).replace(/"/g,'""')+'"';
-function value(c){return ['work','think','no'].includes(saved[c.dataset.reviewKey])?saved[c.dataset.reviewKey]:'unset'}
+function value(c){return saved[c.dataset.reviewKey]||'unset'}
+function info(t,error=false){let el=document.getElementById('shared-review-info');if(!el){el=document.createElement('small');el.id='shared-review-info';el.style.cssText='display:block;margin:6px 0';document.getElementById('reels-subnav')?.insertAdjacentElement('afterend',el)}if(el){el.textContent=t;el.style.color=error?'#b82744':'#6c5260'}}
 function refresh(){
  const counts={work:0,think:0,no:0};
  controls.forEach(c=>{
-  const val=value(c);
-  if(Object.prototype.hasOwnProperty.call(counts,val))counts[val]++;
+  const val=value(c);if(val in counts)counts[val]++;
   c.querySelectorAll('.review-emoji').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.value===val)));
   const row=c.closest('[data-review-item]');
   if(row){
-    let tag=row.querySelector(':scope > summary > .review-selection, :scope > .review-selection');
-    if(val==='unset'){if(tag)tag.remove()}else{
-      if(!tag){tag=document.createElement('span');tag.className='review-selection';
-        const summary=row.querySelector(':scope > summary');const plus=summary?.querySelector('.plus');
-        if(summary){if(plus)summary.insertBefore(tag,plus);else summary.append(tag)}else row.append(tag);
-      }
-      const names={work:'✅ В работу',think:'🤔 Подумаю',no:'👎 Не нравится'};
-      tag.textContent=names[val];tag.dataset.status=val;
-    }
+   let tag=row.querySelector(':scope > summary > .review-selection, :scope > .review-selection');
+   if(val==='unset'){if(tag)tag.remove()}else{
+    if(!tag){tag=document.createElement('span');tag.className='review-selection';const summary=row.querySelector(':scope > summary');const plus=summary?.querySelector('.plus');if(summary){if(plus)summary.insertBefore(tag,plus);else summary.append(tag)}else row.append(tag)}
+    tag.textContent=names[val];tag.dataset.status=val;
+   }
+   row.classList.toggle('hidden-by-filter',filter&&filter.value!=='all'&&filter.value!==val);
   }
-  if(row)row.classList.toggle('hidden-by-filter',filter&&filter.value!=='all'&&filter.value!==val);
  });
- for(const k of ['work','think','no']){const el=document.getElementById(k+'-count');if(el)el.textContent=counts[k]}
+ for(const k of Object.keys(counts)){const el=document.getElementById(k+'-count');if(el)el.textContent=counts[k]}
 }
-controls.forEach(c=>{c.querySelectorAll('.review-emoji').forEach(button=>{
- button.addEventListener('click',e=>{
-  e.preventDefault();e.stopPropagation();
-  const key=c.dataset.reviewKey;
-  if(value(c)===button.dataset.value)delete saved[key];else saved[key]=button.dataset.value;
-  try{localStorage.setItem(KEY,JSON.stringify(saved))}catch(e){}
-  refresh();
- });
-});});
+async function load(){
+ if(busy||document.visibilityState==='hidden')return;
+ try{
+  const response=await fetch(BASE+'?select=review_key,decision',{headers,cache:'no-store'});
+  if(!response.ok)throw Error('HTTP '+response.status);
+  const rows=await response.json();const next={};
+  for(const row of rows)if(['work','think','no'].includes(row.decision))next[row.review_key]=row.decision;
+  saved=next;loaded=true;refresh();info('');
+ }catch(e){loaded=false;info('Нет связи с общими решениями. Попробуйте обновить страницу.',true)}
+}
+async function commit(c,newValue){
+ if(!loaded||busy){info('Сохранение недоступно: нет связи с базой.',true);return}
+ busy=true;
+ try{
+  const k=c.dataset.reviewKey,req=newValue==='unset'
+   ?fetch(BASE+'?review_key=eq.'+encodeURIComponent(k),{method:'DELETE',headers})
+   :fetch(BASE+'?on_conflict=review_key',{method:'POST',headers:{...headers,Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify({review_key:k,decision:newValue})});
+  const response=await req;if(!response.ok)throw Error('HTTP '+response.status);
+  if(newValue==='unset')delete saved[k];else saved[k]=newValue;
+  refresh();info('Сохранено для всех пользователей');
+ }catch(e){info('Не удалось сохранить решение: '+e.message,true)}
+ finally{busy=false;setTimeout(load,1000)}
+}
+controls.forEach(c=>c.querySelectorAll('.review-emoji').forEach(button=>button.addEventListener('click',e=>{
+ e.preventDefault();e.stopPropagation();commit(c,value(c)===button.dataset.value?'unset':button.dataset.value)
+})));
 if(filter)filter.addEventListener('change',refresh);
 const exportButton=document.getElementById('export-decisions');
 if(exportButton)exportButton.addEventListener('click',()=>{
- const names={work:'В работу',think:'Подумаю',no:'Не нравится',unset:'Без решения'};
- const rows=[['Раздел','Тема','Решение']];
- controls.forEach(c=>{
- const section=c.closest('section');const tab=document.querySelector('[aria-controls="'+section.id+'"]');
- const group=c.closest('.season');const groupName=group?.querySelector('.season-title')?.textContent||'';
- rows.push([(tab?.textContent.trim().replace(/\d+$/,'')||section.id)+(groupName?' / '+groupName:''),c.dataset.reviewTitle,names[value(c)]]);
- });
- const csv='\ufeff'+rows.map(r=>r.map(escapeCsv).join(';')).join('\r\n');
- const blob=new Blob([csv],{type:'text/csv;charset=utf-8'});const url=URL.createObjectURL(blob);
- const a=document.createElement('a');a.href=url;a.download='resheniya_nasti_reels.csv';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),500);
+ const labels={work:'В работу',think:'Подумаю',no:'Не нравится',unset:'Без решения'},rows=[['Раздел','Тема','Решение']];
+ controls.forEach(c=>{const section=c.closest('section'),tab=document.querySelector('[aria-controls="'+section.id+'"]'),group=c.closest('.season'),groupName=group?.querySelector('.season-title')?.textContent||'';rows.push([(tab?.textContent.trim()||section.id)+(groupName?' / '+groupName:''),c.dataset.reviewTitle,labels[value(c)]])});
+ const csv='\ufeff'+rows.map(r=>r.map(escapeCsv).join(';')).join('\r\n'),blob=new Blob([csv],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+ a.href=url;a.download='resheniya_nasti_reels.csv';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),500)
 });
-refresh();
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')load()});
+refresh();load();setInterval(load,15000);
 })();</script><script>
 (function(){
 const STORE='wow_content_cards_v2';
