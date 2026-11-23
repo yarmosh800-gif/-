@@ -369,7 +369,7 @@ body.wow-editing .wow-content-table td{min-height:42px}
  text-underline-offset:5px;
  text-decoration-thickness:1.5px;
 }
-</style></head><body><main class="shell"><h1 class="brand-title"><span class="brand-clapper" aria-hidden="true"><svg viewBox="0 0 56 60" fill="none" width="46" height="48" stroke="currentColor" stroke-width="2.8" stroke-linejoin="round"><rect x="9" y="21" width="38" height="31" rx="5"/><path d="M9 21L6 11Q5 7 10 6L43 2Q47 2 48 7L50 16Z"/><path d="M17 6l8 12M32 4l8 13M14 30h30"/><path d="M26 35l10 6-10 6z" fill="currentColor" stroke="none"/></svg></span>КОНТЕНТ-БАНК</h1><div class="wow-page-editor" id="wow-page-editor"><button type="button" class="wow-page-edit-start" id="wow-page-edit-start" aria-pressed="false">✎ Редактировать</button><button type="button" class="wow-page-edit-save" id="wow-page-edit-save" hidden>Сохранить</button><button type="button" class="wow-page-edit-cancel" id="wow-page-edit-cancel" hidden>Отменить</button><span id="wow-page-edit-status" role="status" aria-live="polite"></span></div><div class="panel"><div class="workspace"><div aria-label="Разделы контент-банка" class="sidebar" role="navigation">
+</style><style id="idea-assignee-style">.ideas-person-select{border:1px solid #ecd6e0;border-radius:999px;background:#f8eaf1;color:#772747;font-size:11px;font-weight:700;padding:5px 8px;max-width:100%;cursor:pointer}.ideas-person-select:focus-visible{outline:2px solid #8c103a;outline-offset:2px}</style></head><body><main class="shell"><h1 class="brand-title"><span class="brand-clapper" aria-hidden="true"><svg viewBox="0 0 56 60" fill="none" width="46" height="48" stroke="currentColor" stroke-width="2.8" stroke-linejoin="round"><rect x="9" y="21" width="38" height="31" rx="5"/><path d="M9 21L6 11Q5 7 10 6L43 2Q47 2 48 7L50 16Z"/><path d="M17 6l8 12M32 4l8 13M14 30h30"/><path d="M26 35l10 6-10 6z" fill="currentColor" stroke="none"/></svg></span>КОНТЕНТ-БАНК</h1><div class="wow-page-editor" id="wow-page-editor"><button type="button" class="wow-page-edit-start" id="wow-page-edit-start" aria-pressed="false">✎ Редактировать</button><button type="button" class="wow-page-edit-save" id="wow-page-edit-save" hidden>Сохранить</button><button type="button" class="wow-page-edit-cancel" id="wow-page-edit-cancel" hidden>Отменить</button><span id="wow-page-edit-status" role="status" aria-live="polite"></span></div><div class="panel"><div class="workspace"><div aria-label="Разделы контент-банка" class="sidebar" role="navigation">
 
 <div class="sidebar-heading">РАЗДЕЛЫ</div>
 <button class="nav-root active" onclick="openGroup('reels',this)" type="button"><span class="nav-icon instagram-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5"/><circle cx="12" cy="12" r="4.4"/><circle cx="17.7" cy="6.6" r="1" fill="currentColor" stroke="none"/></svg></span><span>Reels</span></button>
@@ -478,6 +478,7 @@ body.wow-editing .wow-content-table td{min-height:42px}
 <label>Название идеи<input id="ideas-title" required maxlength="180" placeholder="Например, банк сторис для пустых дней"></label>
 <label>Описание / текст из чата<textarea id="ideas-description" rows="4" placeholder="Скопируйте сообщение или опишите идею своими словами"></textarea></label>
 <label>Референс или ссылка<input id="ideas-link" type="url" placeholder="https://..."></label>
+<div class="ideas-form-grid"><label>Ответственный<select id="ideas-assignee"><option value="">Не назначен</option><option value="Саша">Саша</option><option value="Наташа">Наташа</option><option value="Настя">Настя</option><option value="Даша">Даша</option></select></label></div>
 <div class="ideas-form-grid"><label>Статус<select id="ideas-status"><option value="new">Новая</option><option value="later">На будущее</option><option value="doing">В работе</option></select></label><label>Срок реализации<input id="ideas-deadline" type="date"></label></div>
 <label>Результат / вывод<textarea id="ideas-result" rows="2" placeholder="Заполним после реализации"></textarea></label><label>Итог идеи<select id="ideas-outcome"><option value="pending">Пока не оценена</option><option value="success">✅ Зашла</option><option value="failure">❌ Не зашла</option></select></label>
 <div class="ideas-form-actions"><button type="button" id="ideas-delete" class="ideas-danger" hidden>Удалить</button><button type="submit" class="primary-action">Сохранить идею</button></div></form></dialog>
@@ -663,7 +664,7 @@ async function api(method,path='',body=null){
 }
 async function refresh(){
  if(busy||document.visibilityState==='hidden')return;
- try{const rows=await api('GET','?select=id,title,description,link,status,deadline,result,sort_order,updated_at&order=sort_order.asc,updated_at.asc');
+ try{const rows=await api('GET','?select=id,title,description,link,status,deadline,result,sort_order,updated_at,outcome,assignee&order=sort_order.asc,updated_at.asc');
  const previous=JSON.stringify(ideas);ideas=Array.isArray(rows)?rows:[];
  if(JSON.stringify(ideas)!==previous)render();
  info('');
@@ -680,6 +681,12 @@ function render(){
  card.append(el('h4','',item.title));
  if(item.description)card.append(el('p','',item.description.length>140?item.description.slice(0,137)+'…':item.description));
  const foot=el('div','ideas-card-footer');
+ const person=el('select','ideas-person-select');person.setAttribute('aria-label','Ответственный за идею: '+item.title);
+ for(const [val,label] of [['','Ответственный —'],['Саша','Саша'],['Наташа','Наташа'],['Настя','Настя'],['Даша','Даша']]){const option=el('option','',label);option.value=val;person.append(option)}
+ person.value=item.assignee||'';
+ person.addEventListener('click',e=>e.stopPropagation());person.addEventListener('pointerdown',e=>e.stopPropagation());
+ person.addEventListener('change',async e=>{e.stopPropagation();const selected=person.value;person.disabled=true;const ok=await saveChange('PATCH','?id=eq.'+encodeURIComponent(item.id),{assignee:selected,updated_at:new Date().toISOString()});if(!ok)person.value=item.assignee||'';person.disabled=false});
+ foot.append(person);
  if(status==='doing')foot.append(el('span','ideas-due'+(!item.deadline?' missing':''),item.deadline?'Срок: '+item.deadline.split('-').reverse().join('.'):'Укажите срок'));
  if(item.outcome==='success')foot.append(el('span','idea-outcome-badge','✓ Зашла'));else if(item.outcome==='failure')foot.append(el('span','idea-outcome-badge','✕ Не зашла'));
  if(item.link){const a=el('a','ideas-reference','Референс ↗');a.href=item.link;a.target='_blank';a.rel='noopener noreferrer';a.onclick=e=>e.stopPropagation();foot.append(a)}
@@ -711,16 +718,16 @@ document.querySelectorAll('.ideas-column').forEach(col=>{
  col.addEventListener('drop',e=>{e.preventDefault();e.stopPropagation();col.classList.remove('ideas-drop-target');const id=e.dataTransfer.getData('text/plain')||draggingId;const target=e.target.closest('.ideas-card');if(id)move(id,status,target&&target.dataset.id!==id?target.dataset.id:null)});
 });
 function open(id){
- editing=id;const item=ideas.find(x=>x.id===id)||{title:'',description:'',link:'',status:'new',deadline:'',result:'',outcome:'pending'};
+ editing=id;const item=ideas.find(x=>x.id===id)||{title:'',description:'',link:'',status:'new',deadline:'',result:'',outcome:'pending',assignee:''};
  $('ideas-modal-title').textContent=id?'Редактировать идею':'Добавить идею';
- for(const k of ['title','description','link','status','deadline','result','outcome'])$('ideas-'+k).value=item[k]|| (k==='status'?'new':k==='outcome'?'pending':'');
+ for(const k of ['title','description','link','status','deadline','result','outcome','assignee'])$('ideas-'+k).value=item[k]|| (k==='status'?'new':k==='outcome'?'pending':'');
  $('ideas-delete').hidden=!id;$('ideas-dialog').showModal();
 }
 $('ideas-add').onclick=()=>open(null);
 $('ideas-close').onclick=()=>$('ideas-dialog').close();
 $('ideas-form').addEventListener('submit',async e=>{
  e.preventDefault();
- const data={};for(const k of ['title','description','link','status','deadline','result','outcome'])data[k]=$('ideas-'+k).value.trim();
+ const data={};for(const k of ['title','description','link','status','deadline','result','outcome','assignee'])data[k]=$('ideas-'+k).value.trim();
  if(data.status==='doing'&&!data.deadline){$('ideas-deadline').setCustomValidity('Укажите срок для идеи в работе');$('ideas-deadline').reportValidity();return}
  $('ideas-deadline').setCustomValidity('');
  data.deadline=data.deadline||null;data.updated_at=new Date().toISOString();
