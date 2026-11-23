@@ -369,7 +369,22 @@ body.wow-editing .wow-content-table td{min-height:42px}
  text-underline-offset:5px;
  text-decoration-thickness:1.5px;
 }
-</style><style id="idea-assignee-style">.ideas-person-select{border:1px solid #ecd6e0;border-radius:999px;background:#f8eaf1;color:#772747;font-size:11px;font-weight:700;padding:5px 8px;max-width:100%;cursor:pointer}.ideas-person-select:focus-visible{outline:2px solid #8c103a;outline-offset:2px}</style></head><body><main class="shell"><h1 class="brand-title"><span class="brand-clapper" aria-hidden="true"><svg viewBox="0 0 56 60" fill="none" width="46" height="48" stroke="currentColor" stroke-width="2.8" stroke-linejoin="round"><rect x="9" y="21" width="38" height="31" rx="5"/><path d="M9 21L6 11Q5 7 10 6L43 2Q47 2 48 7L50 16Z"/><path d="M17 6l8 12M32 4l8 13M14 30h30"/><path d="M26 35l10 6-10 6z" fill="currentColor" stroke="none"/></svg></span>КОНТЕНТ-БАНК</h1><div class="wow-page-editor" id="wow-page-editor"><button type="button" class="wow-page-edit-start" id="wow-page-edit-start" aria-pressed="false">✎ Редактировать</button><button type="button" class="wow-page-edit-save" id="wow-page-edit-save" hidden>Сохранить</button><button type="button" class="wow-page-edit-cancel" id="wow-page-edit-cancel" hidden>Отменить</button><span id="wow-page-edit-status" role="status" aria-live="polite"></span></div><div class="panel"><div class="workspace"><div aria-label="Разделы контент-банка" class="sidebar" role="navigation">
+</style><style id="idea-assignee-style">.ideas-person-select{border:1px solid #ecd6e0;border-radius:999px;background:#f8eaf1;color:#772747;font-size:11px;font-weight:700;padding:5px 8px;max-width:100%;cursor:pointer}.ideas-person-select:focus-visible{outline:2px solid #8c103a;outline-offset:2px}</style><style id="reels-tests-drag-and-date">
+.reels-tests-table{min-width:670px}
+.reels-tests-table th:nth-child(1){width:31%}
+.reels-tests-table th:nth-child(2){width:23%}
+.reels-tests-table th:nth-child(3){width:21%}
+.reels-tests-table th:nth-child(4){width:20%}
+.reels-tests-table th:nth-child(5){width:5%}
+.reels-test-row{cursor:grab}
+.reels-test-row:active{cursor:grabbing}
+.reels-test-grip{float:left;margin-right:8px;color:#b28a9f;font-size:17px;line-height:1}
+.reels-test-dragging{opacity:.35}
+.reels-test-drop-before{box-shadow:inset 0 3px #9e204b}
+.reels-test-drop-after{box-shadow:inset 0 -3px #9e204b}
+.reels-test-inline-date{max-width:100%;width:142px;min-width:0;border:1px solid #efd7e3;background:#fff7fa;border-radius:8px;color:#592b42;font:inherit;font-size:11px;padding:7px 5px;cursor:pointer;box-sizing:border-box}
+.reels-test-inline-date:focus-visible{outline:2px solid #9e204b}
+</style></head><body><main class="shell"><h1 class="brand-title"><span class="brand-clapper" aria-hidden="true"><svg viewBox="0 0 56 60" fill="none" width="46" height="48" stroke="currentColor" stroke-width="2.8" stroke-linejoin="round"><rect x="9" y="21" width="38" height="31" rx="5"/><path d="M9 21L6 11Q5 7 10 6L43 2Q47 2 48 7L50 16Z"/><path d="M17 6l8 12M32 4l8 13M14 30h30"/><path d="M26 35l10 6-10 6z" fill="currentColor" stroke="none"/></svg></span>КОНТЕНТ-БАНК</h1><div class="wow-page-editor" id="wow-page-editor"><button type="button" class="wow-page-edit-start" id="wow-page-edit-start" aria-pressed="false">✎ Редактировать</button><button type="button" class="wow-page-edit-save" id="wow-page-edit-save" hidden>Сохранить</button><button type="button" class="wow-page-edit-cancel" id="wow-page-edit-cancel" hidden>Отменить</button><span id="wow-page-edit-status" role="status" aria-live="polite"></span></div><div class="panel"><div class="workspace"><div aria-label="Разделы контент-банка" class="sidebar" role="navigation">
 
 <div class="sidebar-heading">РАЗДЕЛЫ</div>
 <button class="nav-root active" onclick="openGroup('reels',this)" type="button"><span class="nav-icon instagram-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5"/><circle cx="12" cy="12" r="4.4"/><circle cx="17.7" cy="6.6" r="1" fill="currentColor" stroke="none"/></svg></span><span>Reels</span></button>
@@ -462,7 +477,7 @@ body.wow-editing .wow-content-table td{min-height:42px}
 </div>
 <div class="reels-tests-section" id="reels-tests-section">
   <div class="reels-tests-header"><h3>Тесты Reels</h3><button type="button" class="primary-action" id="reels-tests-add">+ Добавить тест</button></div>
-  <div class="reels-tests-scroll"><table class="reels-tests-table"><thead><tr><th>Гипотеза / идея теста</th><th>Срок реализации</th><th>Результат</th><th>Вывод</th><th>Оценка</th><th></th></tr></thead><tbody id="reels-tests-body"></tbody></table></div>
+  <div class="reels-tests-scroll"><table class="reels-tests-table"><thead><tr><th>Гипотеза / идея теста</th><th>Срок реализации</th><th>Результат</th><th>Вывод</th><th></th></tr></thead><tbody id="reels-tests-body"></tbody></table></div>
   <p id="reels-tests-error" class="reels-tests-error" aria-live="polite"></p>
 </div>
 <dialog id="reels-tests-dialog" class="ideas-dialog"><form id="reels-tests-form" class="ideas-form">
@@ -470,7 +485,7 @@ body.wow-editing .wow-content-table td{min-height:42px}
   <label>Гипотеза<input id="reels-test-hypothesis" maxlength="500" required placeholder="Что хотим проверить?"></label>
   <label>Идея теста<textarea id="reels-test-idea" rows="3" placeholder="Как именно будем тестировать?"></textarea></label>
   <label>Срок реализации<input id="reels-test-deadline" type="date"></label>
-  <label>Результат<textarea id="reels-test-result" rows="3" placeholder="Фактические показатели и наблюдения"></textarea></label><label>Итог теста<select id="reels-test-outcome"><option value="pending">Пока не оценён</option><option value="success">✅ Сработало</option><option value="failure">❌ Не сработало</option></select></label>
+  <label>Результат<textarea id="reels-test-result" rows="3" placeholder="Фактические показатели и наблюдения"></textarea></label>
   <label>Вывод<textarea id="reels-test-conclusion" rows="3" placeholder="Что поняли и что делаем дальше?"></textarea></label>
   <div class="ideas-form-actions"><button type="button" id="reels-test-delete" class="ideas-danger" hidden>Удалить</button><button type="submit" class="primary-action">Сохранить тест</button></div>
 </form></dialog>
@@ -747,34 +762,88 @@ render();refresh();setInterval(refresh,4000);document.addEventListener('visibili
 'use strict';
 const API='https://mkwupwbpgfdvaciowgel.supabase.co/rest/v1/wow_reels_tests';
 const KEY='sb_publishable_OfuG19Samqr0tCsQmIr9eA_QBVwa98X';
-const $=id=>document.getElementById(id),FIELDS=['hypothesis','idea','deadline','result','conclusion','outcome'];
+const $=id=>document.getElementById(id),FIELDS=['hypothesis','idea','deadline','result','conclusion'];
 const HEAD={apikey:KEY,'Content-Type':'application/json'};
-let rows=[],editing=null,busy=false,dialog=$('reels-tests-dialog');
+let rows=[],editing=null,busy=false,dragging=null,dialog=$('reels-tests-dialog');
 async function query(method,path='',data){
- const options={method,headers:{...HEAD}};if(data!==undefined){options.body=JSON.stringify(data);options.headers.Prefer='return=minimal'}
- const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),12000);options.signal=controller.signal;
- try{const response=await fetch(API+path,options);if(!response.ok){let msg='';try{msg=(await response.json()).message||''}catch{}throw Error('HTTP '+response.status+' '+msg)}return method==='GET'?response.json():true}finally{clearTimeout(timer)}
+ const options={method,headers:{...HEAD}};
+ if(data!==undefined){options.body=JSON.stringify(data);options.headers.Prefer='return=minimal'}
+ const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),12000);
+ options.signal=controller.signal;
+ try{
+  const response=await fetch(API+path,options);
+  if(!response.ok){let msg='';try{msg=(await response.json()).message||''}catch{}throw Error('HTTP '+response.status+' '+msg)}
+  return method==='GET'?response.json():true
+ }finally{clearTimeout(timer)}
 }
+function error(message){$('reels-tests-error').textContent=message||''}
 function cell(value){const td=document.createElement('td');td.textContent=value||'—';return td}
+async function patch(id,data){
+ if(busy){error('Другое изменение ещё сохраняется');return false}
+ busy=true;
+ try{await query('PATCH','?id=eq.'+encodeURIComponent(id),{...data,updated_at:new Date().toISOString()});error('');return true}
+ catch(e){error('Не удалось сохранить изменение: '+e.message);return false}
+ finally{busy=false;await refresh()}
+}
+function orderRows(){return rows.slice().sort((a,b)=>Number(a.sort_order)-Number(b.sort_order)||(String(a.created_at).localeCompare(String(b.created_at))))}
+async function reposition(id,targetId,after){
+ if(!id||!targetId||id===targetId||busy)return;
+ const ordered=orderRows().filter(x=>x.id!==id);
+ const i=ordered.findIndex(x=>x.id===targetId);if(i<0)return;
+ const pos=i+(after?1:0);
+ const previous=pos?ordered[pos-1]:null,next=ordered[pos]||null;
+ const prevValue=previous?Number(previous.sort_order):null,nextValue=next?Number(next.sort_order):null;
+ let rank=prevValue===null?(nextValue===null?1:nextValue-1):nextValue===null?prevValue+1:(prevValue+nextValue)/2;
+ if(!Number.isFinite(rank))return;
+ const item=rows.find(x=>x.id===id);
+ if(item&&Number(item.sort_order)===rank)return;
+ const ok=await patch(id,{sort_order:rank});
+ if(!ok)render();
+}
 function render(){
  const body=$('reels-tests-body');body.replaceChildren();
- if(!rows.length){const tr=document.createElement('tr'),td=cell('Пока нет тестов. Добавьте первую гипотезу.');td.colSpan=6;td.className='reels-test-empty';tr.append(td);body.append(tr);return}
- rows.forEach(item=>{
- const tr=document.createElement('tr');tr.className=item.outcome==='success'?'reels-test-success':item.outcome==='failure'?'reels-test-failure':'';
- const titleCell=document.createElement('td');const heading=document.createElement('strong');heading.className='reels-test-name';heading.textContent=item.hypothesis||'Без названия';const subtitle=document.createElement('div');subtitle.className='reels-test-subtitle';subtitle.textContent=item.idea||'';titleCell.append(heading,subtitle);tr.append(titleCell);
- for(const key of ['deadline','result','conclusion']){let value=item[key];if(key==='deadline'&&value)value=value.split('-').reverse().join('.');tr.append(cell(value))}
- const outcomeCell=cell(item.outcome==='success'?'✓ Сработало':item.outcome==='failure'?'✕ Не сработало':'—');outcomeCell.className='reels-outcome-tag';tr.append(outcomeCell);
- const actions=document.createElement('td'),edit=document.createElement('button');edit.type='button';edit.className='reels-test-edit';edit.textContent='✎';edit.title='Редактировать тест';edit.setAttribute('aria-label','Редактировать тест');edit.onclick=()=>open(item.id);actions.append(edit);tr.append(actions);body.append(tr)
+ if(!rows.length){const tr=document.createElement('tr'),td=cell('Пока нет тестов. Добавьте первую гипотезу.');td.colSpan=5;td.className='reels-test-empty';tr.append(td);body.append(tr);return}
+ orderRows().forEach(item=>{
+  const tr=document.createElement('tr');tr.className='reels-test-row';tr.dataset.id=item.id;
+  const titleCell=document.createElement('td');
+  const heading=document.createElement('strong');heading.className='reels-test-name';heading.textContent=item.hypothesis||'Без названия';
+  const subtitle=document.createElement('div');subtitle.className='reels-test-subtitle';subtitle.textContent=item.idea||'';
+  const handle=document.createElement('span');handle.className='reels-test-grip';handle.textContent='⠿';handle.title='Перетащите гипотезу, чтобы изменить порядок';handle.setAttribute('aria-hidden','true');
+  titleCell.append(handle,heading,subtitle);tr.append(titleCell);
+  const deadlineCell=document.createElement('td'),date=document.createElement('input');
+  date.type='date';date.className='reels-test-inline-date';date.value=item.deadline||'';
+  date.setAttribute('aria-label','Срок реализации: '+item.hypothesis);
+  date.addEventListener('click',e=>e.stopPropagation());
+  date.addEventListener('change',async()=>{
+   const changed=date.value;date.disabled=true;
+   const ok=await patch(item.id,{deadline:changed||null});
+   if(!ok)date.value=item.deadline||'';
+   date.disabled=false;
+  });
+  deadlineCell.append(date);tr.append(deadlineCell);
+  for(const key of ['result','conclusion'])tr.append(cell(item[key]));
+  const actions=document.createElement('td'),edit=document.createElement('button');edit.type='button';edit.className='reels-test-edit';edit.textContent='✎';edit.title='Редактировать тест';edit.setAttribute('aria-label','Редактировать тест');edit.onclick=()=>open(item.id);actions.append(edit);tr.append(actions);
+  tr.draggable=true;
+  tr.addEventListener('dragstart',e=>{
+   if(e.target.closest('input,button')){e.preventDefault();return}
+   dragging=item.id;e.dataTransfer.effectAllowed='move';e.dataTransfer.setData('text/plain',item.id);tr.classList.add('reels-test-dragging');
+  });
+  tr.addEventListener('dragend',()=>{dragging=null;tr.classList.remove('reels-test-dragging');body.querySelectorAll('.reels-test-drop-before,.reels-test-drop-after').forEach(x=>x.classList.remove('reels-test-drop-before','reels-test-drop-after'))});
+  tr.addEventListener('dragover',e=>{if(!dragging||dragging===item.id)return;e.preventDefault();e.dataTransfer.dropEffect='move';const after=e.clientY>tr.getBoundingClientRect().top+tr.getBoundingClientRect().height/2;tr.classList.toggle('reels-test-drop-after',after);tr.classList.toggle('reels-test-drop-before',!after)});
+  tr.addEventListener('dragleave',()=>tr.classList.remove('reels-test-drop-before','reels-test-drop-after'));
+  tr.addEventListener('drop',e=>{e.preventDefault();const source=e.dataTransfer.getData('text/plain')||dragging;const after=e.clientY>tr.getBoundingClientRect().top+tr.getBoundingClientRect().height/2;tr.classList.remove('reels-test-drop-before','reels-test-drop-after');dragging=null;reposition(source,item.id,after)});
+  body.append(tr);
  });
 }
 async function refresh(){
- if(busy||document.visibilityState==='hidden')return;
- try{const next=await query('GET','?select=*&order=sort_order.asc,created_at.asc');$('reels-tests-error').textContent='';if(JSON.stringify(rows)!==JSON.stringify(next)){rows=next;render()}}catch(err){$('reels-tests-error').textContent='Ошибка синхронизации. Повторяем подключение…'}
+ if(busy||document.visibilityState==='hidden'||dragging||dialog.open)return;
+ try{const next=await query('GET','?select=*&order=sort_order.asc,created_at.asc');error('');if(JSON.stringify(rows)!==JSON.stringify(next)){rows=next;render()}}
+ catch(err){error('Ошибка синхронизации. Повторяем подключение…')}
 }
 function open(id){
- editing=id;const item=rows.find(x=>x.id===id)||{hypothesis:'',idea:'',deadline:'',result:'',conclusion:'',outcome:'pending'};
+ editing=id;const item=rows.find(x=>x.id===id)||{hypothesis:'',idea:'',deadline:'',result:'',conclusion:''};
  $('reels-tests-dialog-heading').textContent=id?'Редактировать тест':'Добавить тест';
- for(const field of FIELDS)$('reels-test-'+field).value=item[field]||(field==='outcome'?'pending':'');
+ for(const field of FIELDS)$('reels-test-'+field).value=item[field]||'';
  $('reels-test-delete').hidden=!id;dialog.showModal();
 }
 $('reels-tests-add').onclick=()=>open(null);
@@ -782,14 +851,19 @@ $('reels-tests-close').onclick=()=>dialog.close();
 $('reels-tests-form').onsubmit=async event=>{
  event.preventDefault();if(busy)return;busy=true;
  const data={};for(const field of FIELDS)data[field]=$('reels-test-'+field).value.trim();data.deadline=data.deadline||null;data.updated_at=new Date().toISOString();
- const wasEdit=!!editing;if(!wasEdit){data.id='reels-test-'+Date.now()+'-'+Math.random().toString(36).slice(2,8);data.sort_order=rows.length+1}
- try{await query(wasEdit?'PATCH':'POST',wasEdit?'?id=eq.'+encodeURIComponent(editing):'',data);dialog.close();$('reels-tests-error').textContent=''}catch(error){$('reels-tests-error').textContent='Не удалось сохранить';alert(error.message)}finally{busy=false;refresh()}
+ const wasEdit=!!editing;if(!wasEdit){data.id='reels-test-'+Date.now()+'-'+Math.random().toString(36).slice(2,8);data.sort_order=rows.length?Math.max(...rows.map(x=>Number(x.sort_order)||0))+1:1}
+ try{await query(wasEdit?'PATCH':'POST',wasEdit?'?id=eq.'+encodeURIComponent(editing):'',data);dialog.close();error('')}
+ catch(e){error('Не удалось сохранить');alert(e.message)}
+ finally{busy=false;refresh()}
 };
 $('reels-test-delete').onclick=async()=>{
  if(!editing||busy||!confirm('Удалить этот тест?'))return;busy=true;
- try{await query('DELETE','?id=eq.'+encodeURIComponent(editing));dialog.close()}catch(error){alert('Не удалось удалить: '+error.message)}finally{busy=false;refresh()}
+ try{await query('DELETE','?id=eq.'+encodeURIComponent(editing));dialog.close()}
+ catch(e){alert('Не удалось удалить: '+e.message)}
+ finally{busy=false;refresh()}
 };
-refresh();setInterval(refresh,4000);document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')refresh()});
+refresh();setInterval(refresh,4000);
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')refresh()});
 })();</script><script id="timo-script">(function(){
 function track(i){return document.getElementById('timo-track-'+i)}
 function update(i){const t=track(i);if(!t)return;const index=Math.max(0,Math.min(t.children.length-1,Math.round(t.scrollLeft/Math.max(1,t.clientWidth))));const p=document.getElementById('timo-page-'+i);if(p)p.textContent=(index+1)+' / '+t.children.length;const d=document.getElementById('timo-dots-'+i);if(d)d.querySelectorAll('button').forEach((b,n)=>b.classList.toggle('is-current',n===index))}
