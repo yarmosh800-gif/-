@@ -384,7 +384,7 @@ body.wow-editing .wow-content-table td{min-height:42px}
 .reels-test-drop-after{box-shadow:inset 0 -3px #9e204b}
 .reels-test-inline-date{max-width:100%;width:142px;min-width:0;border:1px solid #efd7e3;background:#fff7fa;border-radius:8px;color:#592b42;font:inherit;font-size:11px;padding:7px 5px;cursor:pointer;box-sizing:border-box}
 .reels-test-inline-date:focus-visible{outline:2px solid #9e204b}
-</style></head><body><main class="shell"><h1 class="brand-title"><span class="brand-clapper" aria-hidden="true"><svg viewBox="0 0 56 60" fill="none" width="46" height="48" stroke="currentColor" stroke-width="2.8" stroke-linejoin="round"><rect x="9" y="21" width="38" height="31" rx="5"/><path d="M9 21L6 11Q5 7 10 6L43 2Q47 2 48 7L50 16Z"/><path d="M17 6l8 12M32 4l8 13M14 30h30"/><path d="M26 35l10 6-10 6z" fill="currentColor" stroke="none"/></svg></span>КОНТЕНТ-БАНК</h1><div class="wow-page-editor" id="wow-page-editor"><button type="button" class="wow-page-edit-start" id="wow-page-edit-start" aria-pressed="false">✎ Редактировать</button><button type="button" class="wow-page-edit-save" id="wow-page-edit-save" hidden>Сохранить</button><button type="button" class="wow-page-edit-cancel" id="wow-page-edit-cancel" hidden>Отменить</button><span id="wow-page-edit-status" role="status" aria-live="polite"></span></div><div class="panel"><div class="workspace"><div aria-label="Разделы контент-банка" class="sidebar" role="navigation">
+</style><style id="ideas-done-column-style">.ideas-board{grid-template-columns:repeat(4,minmax(0,1fr))}.ideas-dot.done{background:#329a71}@media(max-width:1100px){.ideas-board{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:580px){.ideas-board{grid-template-columns:1fr}}</style></head><body><main class="shell"><h1 class="brand-title"><span class="brand-clapper" aria-hidden="true"><svg viewBox="0 0 56 60" fill="none" width="46" height="48" stroke="currentColor" stroke-width="2.8" stroke-linejoin="round"><rect x="9" y="21" width="38" height="31" rx="5"/><path d="M9 21L6 11Q5 7 10 6L43 2Q47 2 48 7L50 16Z"/><path d="M17 6l8 12M32 4l8 13M14 30h30"/><path d="M26 35l10 6-10 6z" fill="currentColor" stroke="none"/></svg></span>КОНТЕНТ-БАНК</h1><div class="wow-page-editor" id="wow-page-editor"><button type="button" class="wow-page-edit-start" id="wow-page-edit-start" aria-pressed="false">✎ Редактировать</button><button type="button" class="wow-page-edit-save" id="wow-page-edit-save" hidden>Сохранить</button><button type="button" class="wow-page-edit-cancel" id="wow-page-edit-cancel" hidden>Отменить</button><span id="wow-page-edit-status" role="status" aria-live="polite"></span></div><div class="panel"><div class="workspace"><div aria-label="Разделы контент-банка" class="sidebar" role="navigation">
 
 <div class="sidebar-heading">РАЗДЕЛЫ</div>
 <button class="nav-root active" onclick="openGroup('reels',this)" type="button"><span class="nav-icon instagram-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5"/><circle cx="12" cy="12" r="4.4"/><circle cx="17.7" cy="6.6" r="1" fill="currentColor" stroke="none"/></svg></span><span>Reels</span></button>
@@ -474,6 +474,7 @@ body.wow-editing .wow-content-table td{min-height:42px}
 <div class="ideas-column" data-column="new"><div class="ideas-col-title"><span class="ideas-dot new"></span><b>Новая</b><span class="ideas-count" id="ideas-count-new">0</span></div><div class="ideas-list" id="ideas-list-new"></div></div>
 <div class="ideas-column" data-column="later"><div class="ideas-col-title"><span class="ideas-dot later"></span><b>На будущее</b><span class="ideas-count" id="ideas-count-later">0</span></div><div class="ideas-list" id="ideas-list-later"></div></div>
 <div class="ideas-column" data-column="doing"><div class="ideas-col-title"><span class="ideas-dot doing"></span><b>В работе</b><span class="ideas-count" id="ideas-count-doing">0</span></div><div class="ideas-list" id="ideas-list-doing"></div></div>
+<div class="ideas-column" data-column="done"><div class="ideas-col-title"><span class="ideas-dot done"></span><b>Готово</b><span class="ideas-count" id="ideas-count-done">0</span></div><div class="ideas-list" id="ideas-list-done"></div></div>
 </div>
 <div class="reels-tests-section" id="reels-tests-section">
   <div class="reels-tests-header"><h3>Тесты Reels</h3><button type="button" class="primary-action" id="reels-tests-add">+ Добавить тест</button></div>
@@ -494,7 +495,7 @@ body.wow-editing .wow-content-table td{min-height:42px}
 <label>Описание / текст из чата<textarea id="ideas-description" rows="4" placeholder="Скопируйте сообщение или опишите идею своими словами"></textarea></label>
 <label>Референс или ссылка<input id="ideas-link" type="url" placeholder="https://..."></label>
 <div class="ideas-form-grid"><label>Ответственный<select id="ideas-assignee"><option value="">Не назначен</option><option value="Саша">Саша</option><option value="Наташа">Наташа</option><option value="Настя">Настя</option><option value="Даша">Даша</option></select></label></div>
-<div class="ideas-form-grid"><label>Статус<select id="ideas-status"><option value="new">Новая</option><option value="later">На будущее</option><option value="doing">В работе</option></select></label><label>Срок реализации<input id="ideas-deadline" type="date"></label></div>
+<div class="ideas-form-grid"><label>Статус<select id="ideas-status"><option value="new">Новая</option><option value="later">На будущее</option><option value="doing">В работе</option><option value="done">Готово</option></select></label><label>Срок реализации<input id="ideas-deadline" type="date"></label></div>
 <label>Результат / вывод<textarea id="ideas-result" rows="2" placeholder="Заполним после реализации"></textarea></label><label>Итог идеи<select id="ideas-outcome"><option value="pending">Пока не оценена</option><option value="success">✅ Зашла</option><option value="failure">❌ Не зашла</option></select></label>
 <div class="ideas-form-actions"><button type="button" id="ideas-delete" class="ideas-danger" hidden>Удалить</button><button type="submit" class="primary-action">Сохранить идею</button></div></form></dialog>
 </section>
@@ -664,7 +665,7 @@ for(const kind of ['youtube','vault']){
 'use strict';
 const URL='https://mkwupwbpgfdvaciowgel.supabase.co/rest/v1/wow_ideas';
 const KEY='sb_publishable_OfuG19Samqr0tCsQmIr9eA_QBVwa98X';
-const $=id=>document.getElementById(id),statuses={new:'Новая',later:'На будущее',doing:'В работе'};
+const $=id=>document.getElementById(id),statuses={new:'Новая',later:'На будущее',doing:'В работе',done:'Готово'};
 const HEAD={'apikey':KEY,'Content-Type':'application/json'};
 let ideas=[],editing=null,busy=false,draggingId=null;
 function el(tag,cls,text){const node=document.createElement(tag);if(cls)node.className=cls;if(text!==undefined)node.textContent=text;return node}
